@@ -1,0 +1,99 @@
+
+{% extends 'base.html'%}
+{% load static%}
+{% load crispy_forms_tags%}
+{% block css%}
+    <link rel="stylesheet" href="{% static 'foruma.css' %}"/>
+{% endblock css%}
+{% block content%}
+
+<div class="container">  
+    <div class="row row_search mt-5 row2">
+        <div class="col-md-6 mt-5 mb-2">
+            <h2><span>Forum YaKoi</span></h2>
+            <p>Demander des renseignement, des conseils, poser vos questions, ou juste discuter avec les membres...</p>
+           
+        {% if requeset.user.is_authenticate%}    
+        <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#createEvenementModal">
+            Commencer une discussion
+        </button>
+        {% endif%}
+
+        </div>
+        <div class="col-md-6 mt-5 mb-2">
+            <form method="GET" action="{% url 'event_search'%}">   
+                <input type="text" name="query" placeholder="Rechercher un evenement" id="search_input"/>
+                <button id="search1">rechercher</button>
+            </form>
+        </div>
+    </div>
+    <div class="row">         
+            <div class="col-md-10">
+                <div class="row">
+                            {% regroup forums|dictsort:"category" by category as forum_list %}
+                            {% for forum in forum_list %}
+                                        <h4>{{forum.grouper}}</h4>
+                                        {% for forum in forum.list %}
+                                        <div class="m-2">                                                                                      
+                                                    <div class="">                        
+                                                            <strong> 
+                                                                <a href="{% url 'profile' forum.user.username%}" class="txt">@{{ forum.user.username}}</a>
+                                                            </strong>
+                                                            
+                                                    <a href="{% url 'forum_detail' forum.url%}" id="texte" class="mt-2">
+                                                            <p class="pb-3 mb-0 small lh-sm border-bottom">{{ forum.description | truncatewords:20}}</p>                                                                                           
+                                                        </a> 
+                                                        </div>  
+                                                      
+                                                </div>                                    
+                                        {% endfor %}
+                                    
+                                          
+                            {% endfor %}
+                </div>  
+            </div>
+
+
+                
+
+            <!--modal creation d'evenement--> 
+            
+
+                <div class="modal fade" id="createEvenementModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="createEvenementModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="modal-title">Creer un forum</h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                    <form method="POST" enctype="multipart/form-data" action="{%url 'forum_list' %}">
+                                        {% csrf_token%}
+                                        {{form | crispy}}
+                                        <center><input type="submit" value="Publier" id="btn-submit"></center>
+                                    </form>  
+                            </div>
+                    
+                          </div>
+                        </div>
+                    <div class="pagination">
+                        <span class="step-links">
+                            {% if forums.has_previous %}
+                                <a href="?page=1">&laquo; first</a>
+                                <a href="?page={{ forums.previous_page_number }}">previous</a>
+                            {% endif %}
+                            <span class="current">
+                                Page {{ forums.number }} of {{ forums.paginator.num_pages }}.
+                            </span>
+                            {% if forums.has_next %}
+                                <a href="?page={{ forums.next_page_number }}">next</a>
+                                <a href="?page={{ forums.paginator.num_pages }}">last &raquo;</a>
+                            {% endif %}
+                        </span>
+                    </div>
+                   
+                </div>
+    </div>
+</div>
+
+{% endblock content%}

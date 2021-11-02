@@ -1,0 +1,71 @@
+{% extends 'base.html'%}
+{% load crispy_forms_tags%}
+{% load static%}
+{% block css%}
+    <link rel="stylesheet" href="{% static 'evenement1.css' %}"/>
+{% endblock %}   
+
+{% block content%}
+<div class="container">
+    {% if publications%}
+    <h2>{{ publications.count }} resultat{{ publications.count|pluralize }}.</h2>
+
+    {%endif%}
+
+    
+
+
+    <div class="row">
+        {% for Evenement in publications%}
+            <div class="col-md-3">
+                    <img src="{{Evenement.image.first.image.url}}" width="100%" height="300px"/>                     
+                <a href="{%url 'event_detail' Evenement.user.username Evenement.url%}" id="titre">{{ Evenement.titre}}</a>
+                <p>{{ Evenement.description | truncatechars:50}}</p>
+                <p>{{Evenement.tarif}} ariary| {{Evenement.lieu}}</p>
+            </div>
+            
+        {%endfor%}
+
+        
+
+    </div>        
+    {% if connexes%}
+        <h2>{{connexes.count}} resultats connexes</h2>
+    {% endif %}    
+    <div class="row">
+        
+        {% for Evenement in connexes%}
+            <div class="col-md-3">
+                <div id="carouselExampleControls{{Evenement.id}}" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                            {% for img in Evenement.image.all %}        
+                                {% if forloop.first %}
+                                    <div class="carousel-item active">
+                                        <img src="{{img.image.url}}" class="card-img-top d-block w-100" height="300px"/>                     
+                                    </div>
+                                {% else %}    
+                                    <div class="carousel-item">
+                                        <img src="{{img.image.url}}"  width="350px" height="300px"/>                     
+                                    </div>
+                                {% endif %}
+                            {%endfor%}
+                    </div>          
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls{{Evenement.id}}" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next"  type="button" data-bs-target="#carouselExampleControls{{Evenement.id}}" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button><br/>
+                </div>  
+                <a href="{%url 'event_detail' Evenement.user.username Evenement.url%}" class="article-tags">{{ Evenement.titre}}</a>
+                <p>{{ Evenement.description | truncatechars:50}}</p>
+                <p>{{Evenement.types}} | {{Evenement.localisation}}</p>
+            </div>
+            
+        {%endfor%}
+    </div>
+
+        
+{%endblock%}    

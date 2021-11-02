@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load static%}
+{% block css%}
+  <link rel="stylesheet" href="{% static 'authenticati.css'%}">
+{%endblock%}
+{% block content %}
+  <div class="container">
+    <center>
+      <div id="box">
+        <div id="tete">
+          <h3>Se connecter</h3>
+          <p>Si vous n'avez pas encore de compte, veuillez vous <a href="{% url 'account_signup' %}">inscrire</a> facilement. Merci!</p>
+          
+        </div>
+      <form method="POST" action="{% url 'account_login' %}">
+          {% csrf_token %}
+          {{ form.as_p }}
+          <a class="button secondaryAction" href="{% url 'account_reset_password' %}">Mot de passe oublié?</a>
+          <button class="primaryAction" type="submit">Se connecter</button>
+        </form>       
+      </div>
+  </center> 
+  <footer>
+    <div class="footer-2">
+     <center>
+      <h1>Ya koi</h1>
+     </center> 
+    </div>
+  </footer>
+{% endblock %}
+

@@ -1,0 +1,127 @@
+{% extends 'base.html'%}
+{% load static %}
+{%load static%}
+{% load crispy_forms_tags%}
+
+{% block css%}
+    <link rel="stylesheet" href="{% static 'event-detail.css' %}"/>
+{% endblock css%}
+{% block content%}
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <center>
+                {%for img in evenement.image.all%}
+                    {%if forloop.first%}
+                        <img src="{{img.image.url}}" class="img-fluid"/><br/>
+                    {%endif%}
+                {%endfor%}                  
+               
+                <h3 id="titre_evenement">{{ evenement.titre}}</h3>
+                {% if request.user == evenement.user %}
+                    <a href="{% url 'event_edit' evenement.user.username evenement.pk%}"><img src="/media/edit.png" width="30px"/></a>
+                    <a href="{% url 'event_delete' evenement.pk%}"><img src="/media/delete.png" width="30px" /></a>
+                {% endif %}
+                <p id="date"> à {{ evenement.lieu}} le {{ evenement.date}} | {{evenement.tarif}}ar git @<a href="{% url 'profile' evenement.user.username%}">{{  evenement.user }}</a></p>
+            </center>
+                <div class="body">
+                    <p>{{ evenement.description }}</p>
+                </div>
+                
+                {% if request.user.is_authenticated%}
+                <form method="POST" action="{% url 'like' evenement.url%}">
+                    {%csrf_token%}
+                    <input type="hidden" value="{{request.path}}" name="next"/>
+                    <button type="submit" class="btn-txt">
+                        {{ evenement.likes.all.count }}like{{ pevenement.likes.all.count|pluralize }}.
+                    
+                    </button>
+                    {{ comments.all.count }} commentaire{{comments.all.count|pluralize }}.
+                    
+                </form>    
+                {%endif%}
+
+
+            <!--champs commentaire + listes commentaires-->
+                
+            {% if requeset.user.is_authenticate%} 
+                <form method="POST">
+                    <div class="row">
+                    <div class="offset-2 col-md-7">
+                        {% csrf_token%}
+                        {{form | crispy}}  
+                    </div>                
+                    <div class="col-md-2">
+                        <input type="submit" value=">" id="btn-comment">
+                    </div>
+                </div>
+                </form>
+            {%endif%}
+            <div class="row m-5">
+                {% for  comment in  comments%}
+                    {%if comment.is_parent%}
+                        <div id="comment">
+                            <p id="comment-user">{{  comment.user }}</p> {{ comment.comment }}
+                            <P id="date">{{comment.create_on}}</P>
+                            
+                        </div>
+
+                        <li class="dropdown">
+                            {% if request.user == comment.user %}
+                                <a href="{% url 'comment_delete' evenement.user.username evenement.pk comment.pk %}" id="date">supprimer</a>
+                            {% endif %}
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" id="date">repondre</a>
+                            <ul class="dropdown-menu" role="menu">
+                                <form method="POST" action="{%url 'comment_reply' evenement.pk comment.pk%}">
+                                    {% csrf_token%}
+                                    {{form | crispy}} 
+                                    <input type="submit" value="Submit">
+                                </form>
+                            </ul>
+                        </li> 
+
+                        <div class="m-5">
+                            {%for child_comment in comment.children%}
+                                <div id="rep_comment">
+                                    <p id="comment-user">{{child_comment.user}}</p>{{child_comment.comment}}
+                                    <P id="date">{{comment.create_on}}</P>
+                                    {% if request.user == child_comment.user %}
+                                        <a href="{% url 'comment_delete' evenement.user.username evenement.pk child_comment.pk%}" id="date">supprimer</a>
+                                    {% endif %}
+
+                                </div>
+                            {%endfor%}
+                        </div> 
+                    {%endif%}    
+            {%endfor%}
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="row">
+                <h4 id="titre_evenement">Connexes</h4>
+                {%for event in evenements%}
+                    <div class="row">
+                        <div class="col-md-4 connexe">
+                            {% for img in event.image.all %}
+                                {% if forloop.first %}
+                                    <div class="">
+                                        <img src="{{img.image.url}}" width="100px" height="70px"/>                     
+                                    </div>                      
+                                {% endif %}
+                            {%endfor%}      
+                        </div>
+                        <div class="col-md-8">
+                            <a href="{%url 'event_detail' event.user.username event.url%}" id="titre_connexe">{{ event.titre}}</a>       
+                            <p id="p_list">{{ event.description | truncatechars:50}}</p>             
+                        </div> 
+                    </div>                  
+                {%endfor%}
+            </div>
+
+            
+        </div>
+    </div>
+      
+</div>
+{% endblock content%}
+

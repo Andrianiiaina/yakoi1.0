@@ -1,0 +1,289 @@
+{% extends 'base.html'%}
+{% load crispy_forms_tags%}
+{% load static %}
+{%block css%}
+    <link rel="stylesheet" href="{% static 'profile1.css' %}"/>
+{%endblock css%}
+{% block content%}
+<div class="container">   
+    
+    <div class="row">
+        {% if request.user == user%}
+            {%if profile.fonction == True %}
+               
+            
+                <div class="col-md-2">
+                    {%if is_following%}
+                        <form method="POST" action="{% url 'remove_follower' profile.pk%}">
+                            {% csrf_token %}
+                            <button type="submit"><img src="/media/suivre1.png" width="50px"></button>
+                        </form>
+                    {%else%}
+                        <form method="POST" action="{% url 'add_follower' profile.pk%}">
+                            {% csrf_token %}
+                            <button type="submit"><img src="/media/suivre0.png" width="50px"></button>
+                        </form>
+                    {%endif%} 
+
+                </div>     
+
+                <div class="col-md-2">
+                    <button type="button" data-bs-toggle="modal" data-bs-target="#EditAlbumModal" class="btn">
+                        Modifier l'album
+                    </button>
+                </div>
+                <div class="col-md-3">
+                    <button type="button" data-bs-toggle="modal" data-bs-target="#createEvenementModal" class="btn">
+                    Créer un evenement
+                </button>
+                </div>
+                <div class="col-md-3">
+                    <button type="button" data-bs-toggle="modal" data-bs-target="#createVoyageModal" class="btn">
+                    Organiser un voyage
+                </button>
+                </div>
+            {%endif%}
+            
+        
+        {%endif%}
+        <center>
+            <img src="{{profile.picture.url}}" id="img_profile" width="400px" height="340px"/>
+                <h2 id="pseudo">{{user.username}}</h2>  
+                 
+                {% if profile.fonction == True %} 
+                    <div id="bio">{{profile.bio}}</div>  
+                     <a href="{%url 'list_followers' profile.pk %}" class="btn">Suivis par {{number_of_followers}} personnes</a> 
+
+                    <small>| Adresse : {{profile.localisation}} |
+                     telephone : {{profile.contact}} |
+                     email : {{user.email}}     </small>   
+
+                {%else%}
+                <h2>Mes activites:</h2>
+                    {% for i in activities%}
+                        <p>{{i}}</p>
+                    {%endfor%}
+                {%endif%}             
+                    
+                           
+            </center>
+
+    <div class="container">
+        {% if user.is_staff%}
+         <!--Gallerie d'image-->
+         <div class="card card_gallery mt-5"> 
+            <h2>Galleries</h2>
+             <div class="row">
+                {% for gallery in galleries%}
+                <div class="col-md-4 mt-3 col-lg-3">  
+                    <img src="{{gallery.image.first.image.url}}" class="img_gallery" height="300px"data-bs-toggle="modal" data-bs-target="#EditAlbumModal{{gallery.id}}" alt="image" width="100%" />  
+                    <div class="modal fade" id="EditAlbumModal{{gallery.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="EditAlbumModalLabel{{gallery.id}}" aria-hidden="true">
+                        <div class="modal-dialog">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="modal-title">{{gallery.titre}}</h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                           
+                            <div id="carouselExampleControls{{gallery.id}}" class="carousel slide" data-bs-ride="carousel">
+                                <div class="carousel-inner">
+                                        {% for img in gallery.image.all %}        
+                                            {% if forloop.first %}
+                                                <div class="carousel-item active">
+                                                    <img src="{{img.image.url}}" width="400px" height="400px" />                     
+                                                </div>
+                                            {% else %}    
+                                                <div class="carousel-item">
+                                                    <img src="{{img.image.url}}"  width="400px" height="400px"/>                     
+                                                </div>
+                                            {% endif %}
+                                        {%endfor%}
+                                </div>          
+                                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls{{gallery.id}}" data-bs-slide="prev">
+                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                            <span class="visually-hidden">Previous</span>
+                                        </button>
+                                        <button class="carousel-control-next"  type="button" data-bs-target="#carouselExampleControls{{gallery.id}}" data-bs-slide="next">
+                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                            <span class="visually-hidden">Next</span>
+                                        </button>
+                            </div> 
+                            
+                        <!--a href="{% url 'gallery_delete' gallery.id %}">sup</a-->
+                    
+                          </div>
+                        </div>
+                    </div>     
+                </div>
+            {%endfor%}    
+             </div>
+                      
+                 
+         </div>
+     <div class="mt-5">
+
+                <h2>Evenements de {{user.username}}:</h2>      
+                {% for event in  evenements%}
+                
+                        <div class="row">
+                                <div class="col-md-5">
+
+                                    <div id="carouselExampleControls{{event.id}}" class="carousel slide" data-bs-ride="carousel">
+                                        <div class="carousel-inner">
+                                                {% for img in event.image.all %}        
+                                                    {% if forloop.first %}
+                                                        <div class="carousel-item active">
+                                                            <img src="{{img.image.url}}" class="d-block w-100" width="350px" height="300px"/>                     
+                                                        </div>
+                                                    {% else %}    
+                                                        <div class="carousel-item">
+                                                            <img src="{{img.image.url}}"  width="350px" height="300px"/>                     
+                                                        </div>
+                                                    {% endif %}
+                                                {%endfor%}
+                                        </div>          
+                                                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls{{event.id}}" data-bs-slide="prev">
+                                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                                    <span class="visually-hidden">Previous</span>
+                                                </button>
+                                                <button class="carousel-control-next"  type="button" data-bs-target="#carouselExampleControls{{event.id}}" data-bs-slide="next">
+                                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                                    <span class="visually-hidden">Next</span>
+                                                </button><br/>
+                                    </div> 
+                                </div>
+                                
+                                <div class="col-md-2">
+                                    <h4>{{ event.user.username}}</h4>
+                                    <p id="lieu">{{ event.lieu}} | {{ event.date}} </p>
+                                </div>
+                                <div class="col-md-5">
+                                    <h2 class="card-title"> 
+                                        <a href="{% url 'event_detail' event.user.username event.url%}" id="titre">{{ event.titre}} </a></h2>
+                                    <p>{{ event.description| truncatechars:350}}...</p>
+                                    <p>
+                                        <form method="POST" action="{% url 'like' event.pk%}">
+                                            {%csrf_token%}
+                                            <input type="hidden" value="{{request.path}}"/>
+                                            {% if event.likes.count != 0%}
+                                                {{event.likes.all.count}} like{{event.likes.all.count|pluralize}}
+                                                {%else%}
+                                                0like
+                                            {%endif%}    
+                                            <div class="badge text-wrap"> {{event.category}}</div>
+                                            
+                                        </form>
+                                    </p>
+                                </div>     
+                            
+                        </div> 
+                {%endfor%}                               
+                  <div class="pagination">
+                    <span class="step-links">
+                        {% if evenements.has_previous %}
+                            <a href="?page=1">&laquo; 1</a>
+                            <a href="?page={{ evenements.previous_page_number }}">1</a>
+                        {% endif %}
+                        <span class="current">
+                            Page {{ evenements.number }} sur {{ evenements.paginator.num_pages }}.
+                        </span>
+                        {% if evenements.has_next %}
+                            <a href="?page={{ evenements.next_page_number }}">apres</a>
+                            <a href="?page={{ evenements.paginator.num_pages }}">{{evenements.paginator.num_pages}} &raquo;</a>
+                        {% endif %}
+                    </span>
+                </div>
+        {%endif%}
+    </div>
+</div>
+    </div>
+</div>
+
+     
+
+<!--modal modification profile-->
+<div class="modal fade" id="EditAlbumModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="EditAlbumModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modal-title">Ajouter un album</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form method="POST" enctype="multipart/form-data" action="{%url 'gallery' %}">
+                {% csrf_token%}
+                {{formgallery | crispy}}   
+                <input type="submit" value="Submit">
+            
+            </form>
+        </div>
+
+      </div>
+    </div>
+</div>
+<!--modal creation evenement-->
+  <div class="modal fade" id="createEvenementModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="createEvenementModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modal-title">Creer un evenement</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+                <form method="POST" enctype="multipart/form-data" action="{%url 'event_list' %}">
+                    {% csrf_token%}
+                    {{form_evenement | crispy}}
+                    Date:
+                    <input type="date" name="datet" class="form-control" required/><br/>
+                    
+
+                    <label for="category" class="form-label">Category</label>
+
+                    <select name="category" required class="form-select" id="category">
+                        <option value="concert">Musique, Danse, Spectacle, Festivité</option>
+                        <option value="sport">Activités-Sport</option>
+                        <option value="art">Art, Culture, Theatre</option>
+                        <option value="salon">Salon, conference, atelier</option>
+                        <option value="technologie">Technologies, science</option>
+                        <option value="loisir">Velo, saut en parachute,...</option>
+                        <option value="autres" selected>Divers</option>
+                    </select><br/>
+                    <center><input type="submit" value="Publier" id="btn-submit"></center>
+                </form> 
+        </div>
+   
+    </div>
+
+
+      </div>
+</div>
+
+<!--modal voyage-->
+<div class="modal fade" id="createVoyageModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="createVoyagetModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modal-title">Creer un evenement</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form method="POST" enctype="multipart/form-data" action="{%url 'voyages' %}">
+            {% csrf_token%}
+            {{form_voyage}}
+            <br/>
+            Debut:
+            <input type="date" name="date" class="form-control" required/><br/>
+            Fin:
+            <input type="date" name="datefin" class="form-control" required/><br/>
+
+        <center><input type="submit" value="Publier" id="btn-submit"></center>
+        </form> 
+        
+        </div>
+   
+    </div>
+
+
+      </div>
+</div>
+{% endblock content%}

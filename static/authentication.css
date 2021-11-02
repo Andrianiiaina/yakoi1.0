@@ -1,0 +1,40 @@
+body{
+    width: 100%;
+    background-color: #9e9e9e8c;
+}
+.card2{
+    margin-top: 10%;
+    margin-bottom: 10%;
+}
+
+label {
+    font-size: 18px;
+    font-family: serif;
+    color: #777;
+}
+
+.primaryAction {
+    color: #FFEFD7;
+    background: orangered;
+    height: 40px;
+    border: none;
+    margin-top: 10%;
+    border-radius: 3px;
+}
+#tete{
+    margin-bottom: 50px;
+}
+
+h4#titre {
+    color: orangered;
+}
+.col-md-4.r1 {
+    padding: 5%;
+    color: white;
+    background: white;
+}
+.btn1 {
+    text-decoration: none;
+    color: grey;
+    font-size: 12px;
+}

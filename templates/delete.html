@@ -1,0 +1,17 @@
+{% extends 'base.html'%}
+{% load crispy_forms_tags%}
+{% block content%}
+<div class="row">
+        <div class="mt-5">
+            <center>
+                <form method="POST">
+                    {% csrf_token%}
+                    <h3>Etes-vous sur de vouloir le supprimer?</h3>
+                    
+                    <input type="submit" value="oui" class="mt-5">
+                </form>
+            </center>
+            
+        </div>
+    </div>
+{% endblock content%}

@@ -1,0 +1,18 @@
+{% extends 'base.html'%}
+{% load crispy_forms_tags%}
+{% block content%}
+<div class="container">
+    <div class="row">
+        <h2>Les pages correspondant à votre recherche sont:</h2>
+        {% for profile in  profile_list%}
+        <div class="">
+        {% if profile.pseudo%}
+            <h1><a href="{% url 'profile' profile.username%}"><img src="{{profile.picture.url}}"/>{{profile.pseudo}}</a></h1>
+        {%else%}
+            <h1><a href="{% url 'profile' user.username%}"><img src="{{profile.picture.url}}"/>{{user.username}}</a></h1>    
+        {%endif%}                  
+        </div>
+        {%endfor%}
+    </div>
+</div>
+{% endblock content%}

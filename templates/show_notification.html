@@ -1,0 +1,44 @@
+
+    <a href="#" class="dropdown-toggle nav-link link-secondary px-2" id="navbarDropdown" data-bs-toggle="dropdown" role="button" aria-expanded="false">
+        notifications<span class="badge bg-light notification-badge" onclick="show()">{{notifications.count}} </span></a>
+    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+        {% for notification in notifications%}
+        {%if notification.evenement%}
+            {%if notification.notification_type == 1 %}
+                <li class="dropdown-item-parent">
+                    <a class="dropdown-item" href="{%url 'event_notification' notification.pk notification.evenement.pk %}">{{notification.from_user}} aime votre publication</a>
+                </li>
+            {%elif notification.notification_type == 2 %}
+                <li class="dropdown-item-parent">
+                    <a class="dropdown-item"  href="{%url 'event_notification' notification.pk notification.evenement.pk %}">{{notification.from_user}} a commenter votre publication</a>
+                </li> 
+            {%elif notification.notification_type == 4 %}
+                <li class="dropdown-item-parent">
+                    <a class="dropdown-item" href="{%url 'event_notification' notification.pk notification.evenement.pk %}">{{notification.from_user}} a publier un evenement.</a>
+                </li>       
+            {%elif notification.notification_type == 5 %}
+                {% if notification.evenement.date == date.today %}
+                <li class="dropdown-item-parent">
+                    <a class="dropdown-item" href="{%url 'event_notification' notification.pk notification.evenement.pk %}">{{notification.from_user}} va bientot arriver.</a>
+                </li>    
+                {% endif %}
+
+            {%endif%}  
+
+        {% elif notification.comment%}
+
+            {%if notification.notification_type == 2 %}
+            <li class="dropdown-item-parent">
+                <a class="dropdown-item" href="{%url 'event_notification' notification.pk notification.comment.pk %}">>{{notification.from_user}}a repondu à votre commentaire</a>
+            </li>  
+            {%endif%}    
+        {%else%}
+
+        <li class="dropdown-item-parent">
+            <a class="dropdown-item" href="{%url 'follow_notification' notification.pk notification.from_user.profile.pk %}">{{notification.from_user}} a commencer à vous suivre</a>
+        </li>  
+        {%endif%}
+
+    {%endfor%}
+      
+    </ul>

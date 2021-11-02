@@ -1,0 +1,50 @@
+#rep_comment{
+    margin-left:50px;
+    max-width: 80%;
+}
+
+.body {
+    font-family: unset;
+    font-size: 20px;
+    color: #555;
+}
+
+.connexe {
+    margin-bottom: 25px;
+}
+
+#titre_connexe {
+    color: #0a58ca;
+    text-decoration: none;
+    font-weight: bolder;
+}
+#titre_evenement {
+    color: orangered;
+}
+#date {
+    margin: 0 0 10px;
+    color: rgb(109, 105, 105);
+}
+.btn-txt {
+    border: none;
+    background: none;
+}
+textarea#id_comment {
+    width: 105%;
+    height: 50px;
+}
+#btn-comment {
+    margin: 0;
+    height: 50px;
+}
+
+#comment-user {
+    color: rgb(160, 84, 56);
+    font-size: 20px;
+}
+#comment{
+    max-width: 85%;
+}
+#lieu-h2{
+    color: orangered;
+}

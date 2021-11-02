@@ -1,0 +1,140 @@
+{% extends 'base.html'%}
+{%load static%}
+
+{% load crispy_forms_tags%}
+{% block css%}
+    <link rel="stylesheet" href="{% static 'evenement1.css' %}"/>
+
+{% endblock css%}
+
+
+{% block content%}
+<div class="tete">
+ 
+    <div class="container">
+               <form method="GET" action="{% url 'event_filtre'%}">
+                <div class="row">
+                <div class="offset-1 col-md-2">
+                    <label for="region" class="form-label tt">Lieu</label>
+                    <select name="region" class="form-select mb-4" id="lieu">  
+                        <option value="all">Selectionner un lieu</option>
+                        {% for i in villes %}                     
+                        <option>{{i.name}}</option>
+                        {%endfor%}
+                    </select>
+                </div>
+
+                <div class="col-md-2">
+                    <label for="type" class="form-label tt">Type</label>
+                    <select name="type" class="form-select" id="type">
+                        <option value="all">Tout type d'evenement</option>
+                        <option value="technologie">Technologie & science</option>
+                        <option value="excursion">Excursion</option>
+                        <option value="concert">Concert & spectacle</option>
+                        <option value="divertissement">Loisir & divertissement</option>
+                        <option value="sport">Sport &t bien etre</option>
+                        <option value="salon">Salon & atelier</option>
+                        <option value="autres">Divers</option>
+
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label for="tarif" class="form-label tt" >Tarif maximum</label>
+                    <input type="number" name="tarif" value="2000000" id="tarif" class="form-control">
+                </div>
+
+                <div class="col-md-2" >
+                    <label for="jour" class="form-label tt">Quand?</label>
+                    <select name="jour" class="form-select mb-4" id="jour">                      
+                        <option value="0">Prochainement</option>
+                        <option value="1">Aujourd'hui</option>
+                        <option value="2">Demain</option>
+                        <option value="3">Ce week-end</option>
+                        <option value="4">Cette semaine</option>
+
+                    </select>
+                </div>
+                
+                <div class="col-md-2">
+                    <p>.</p>
+                    <button type="submit" class="btn ttb">Appliquer le filtre</button>
+                </div>
+                <div class="col-md-2">
+             
+       
+                </div>
+            </div>
+            </form>
+        
+    </div>
+</div>
+<div class="container">
+      
+
+    <div class="row">
+        
+         <div class="col-md-8">
+            {% regroup evenements_obj|dictsort:"date" by date as event_list %}
+                {% for event in event_list %}
+                            <h4><span>{{event.grouper|date:"d F "}}</span></h4>
+                            {% for event in event.list %}
+                            <div class="row">
+                                    <div class="col-md-2">   
+                                        <a href="{% url 'event_detail' event.user.username event.url%}" id="titre_evenement">                  
+                                            <img src="{{event.image.first.image.url}}" class="img-fluid rounded-start"/>                     
+                                        </a>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <a href="{% url 'event_detail' event.user.username event.url%}" id="titre_evenement">{{ event.titre}}</a>
+                                        
+                                        
+                                        
+                                        <p id="description">
+                                            <i>{{ event.lieu}}</i>
+                                            par @<a href="{%url 'profile' event.user.username%}" id="profile_lien">{{ event.user}}</a><br/>
+                                            {{ event.description| truncatechars:150}}<br/>
+                                        <small class="text-muted">{{event.category}}</small> </p>
+                                                                
+                                    </div>                       
+                                </div> 
+                    {%endfor%}
+            {%endfor%}
+            <div class="pagination">
+                <span class="step-links">
+                    {% if evenements_obj.has_previous %}
+                        <a href="?page=1">&laquo; 1</a>
+                        <a href="?page={{ evenements_obj.previous_page_number }}">avant</a>
+                    {% endif %}
+                    <span class="current">
+                        Page {{ evenements_obj.number }} sur {{ evenements_obj.paginator.num_pages }}.
+                    </span>
+                    {% if evenements_obj.has_next %}
+                        <a href="?page={{ evenements_obj.next_page_number }}">suivant</a>
+                        <a href="?page={{ evenements_obj.paginator.num_pages }}">{{ evenements_obj.paginator.num_pages }} &raquo;</a>
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+        <div class="col-md-4">    
+
+            <div class="row">               
+                <h4><span>{{"Les plus celebres:"}}</span></h4>         
+                {% for  event in  c_evenements%}
+                    <div class="col-md-3 mb-5">
+                        <img src="{{event.image.first.image.url}}" class="img-fluid" height="60px"/>                                       
+                    </div>
+                    <div class="col-md-8">
+                        <a href="" id="titre_evenement">{{ event.titre}}</a>
+                         <p id="p_list">{{ event.description | truncatechars:50}}</p>
+                    </div>        
+                {%endfor%}
+            </div>
+              
+                    
+        </div>
+    </div>
+   
+</div>
+
+    
+{% endblock content%}

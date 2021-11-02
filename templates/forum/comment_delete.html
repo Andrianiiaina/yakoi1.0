@@ -1,0 +1,14 @@
+{% extends 'base.html'%}
+{% load crispy_forms_tags%}
+{% block content%}
+<div class="row">
+        <div class="offset-2 col-md-8">
+            <form method="POST">
+                {% csrf_token%}
+                <h4>Etes-vous sur de vouloir supprimer ce commentaire?</h4>
+                
+                <input type="submit" value="Submit">
+            </form>
+        </div>
+    </div>
+{% endblock content%}

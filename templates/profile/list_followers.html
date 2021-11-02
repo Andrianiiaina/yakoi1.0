@@ -1,0 +1,26 @@
+{% extends 'base.html'%}
+{% load crispy_forms_tags%}
+{% block content%}
+<div class="container">
+    <div class="row">
+        <h2>ceux qui suivent 
+            {% if profile.pseudo%}
+                {{profile.pseudo}}
+            {%else%}
+                {{profile.user.userpseudo}}    
+            {%endif%}   
+            sont:</h2>
+        {% for follower in  followers%}
+        <div class="col-md-5">
+            {% if profile.pseudo%}
+                <h1><a href="{% url 'profile' follower.username%}"><img src="{{follower.picture.url}}"/>{{follower.pseudo}}</a></h1>
+            {%else%}
+                <h1><a href="{% url 'profile' follower.username%}"><img src="{{follower.picture.url}}"/>{{follower.userpseudo}}</a></h1>    
+            {%endif%}                
+        </div>
+        {%empty%}
+        <p>Personnes pour l'instant</p>
+        {%endfor%}
+    </div>
+</div>
+{% endblock content%}
