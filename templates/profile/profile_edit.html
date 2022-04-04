@@ -1,0 +1,53 @@
+{% extends 'base.html'%}
+{% load crispy_forms_tags%}
+{% block content%}
+<div class="container">
+    <div class="row">
+        <div class="offset-2 col-md-8 card">
+            <div class="card-body">
+                {% if request.user.is_staff == False %}
+                    <h1>Bonjour {{request.user.username}}, bienvenu sur Yakoi! </h1>
+                    <p>Pour finir votre inscription, veulliez remplir ces quelques champs!</p>
+                    <p>Si vous souhaitez vous inscrire en tant que responsable, suivez ce lien:
+                        <a href="{%url 'profile_respo_create' user.pk%}">responsable</a>
+                    </p>
+                {%endif%}
+            <center><h1 id="titre">Modifier mon profile</h1></center>
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token%}
+                {{form | crispy}}
+                <h4 class="mt-5">Activités</h4>
+
+                <input type="checkbox" name="activities[]" value="technologie"  class="form-check-input" id="exampleCheck"/>
+                <label class="form-check-label" for="exampleCheck">Technologie & science</label></br>
+
+                <input type="checkbox" name="activities[]" value="art" class="form-check-input" id="exampleCheck1"/>
+                <label class="form-check-label" for="exampleCheck1">Art & culture</label></br>
+
+                <input type="checkbox" name="activities[]" value="concert" class="form-check-input" id="exampleCheck2"/>
+                <label class="form-check-label" for="exampleCheck2">Concert & spectacle</label><br/>
+
+                <input type="checkbox" name="activities[]" value="sport" class="form-check-input" id="exampleCheck3"/>
+                <label class="form-check-label" for="exampleCheck3">Sport &t bien etre</label><br/>
+
+                <input type="checkbox" name="activities[]" value="loisir" class="form-check-input" id="exampleCheck4"/>
+                <label class="form-check-label" for="exampleCheck4">Loisir & divertissement</label><br/>
+
+                <input type="checkbox" name="activities[]" value="salon" class="form-check-input" id="exampleCheck5"/>
+                <label class="form-check-label" for="exampleCheck5">Salon & atelier</label><br/>
+
+                <input type="checkbox" name="activities[]" value="autres" class="form-check-input" id="exampleCheck6"/>
+                <label class="form-check-label" for="exampleCheck6">Divers</label></br>
+
+                <center><input type="submit" value="Appliquer" id="btn-submit"></center>
+            </form>
+            </div>
+            
+
+        </div>
+    </div>
+    
+
+   
+</div>
+{% endblock content%}

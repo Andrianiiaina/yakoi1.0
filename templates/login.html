@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load static%}
+{% block css%}
+  <link rel="stylesheet" href="{% static 'authentication1.css'%}">
+{%endblock%}
+
+{% block content %}
+  <div class="container">
+        <div class="card2">
+              <div class="row">
+                <div class="offset-2 col-md-4">
+                  <img src="/media/auth.jpg" width="105%" height="450px">
+                </div>
+                  <div class="col-md-4 r1">
+                    <form method="POST" action="{% url 'login' %}">
+
+                      {% csrf_token %}
+
+                      <center>
+                        <h4 id="titre" class="mb-3">Se connecter</h4>
+                      </center>
+                      <label for="username" class="form-label1">Identifiant:</label><br/>
+                      <input type="text" name="username" min_length="4" id="username" class="form-control" required/>
+                      
+                      <br/>
+                      
+                      
+                      <label for="password" class="form-label1">Mot de passe:</label><br/>
+                      <input type="password" name="password" min_length="8" id="password" class="form-control" required />
+                         
+                     <small>
+                      <a class="button btn1" href="{% url 'account_reset_password' %}">Mot de passe oublié?</a><br/>
+                    </small>
+                      <center><button type="submit" class="primaryAction">Se connecter</button></center>
+                    </form>  
+                          </p>
+                      
+                  </div>
+              
+          </div>
+          
+      </div>
+      
+{% endblock %}
+

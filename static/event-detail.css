@@ -1,0 +1,42 @@
+.col-md-8 #description{
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.col-md-8 #description h3,.col-md-4 .row h4 {
+    color: orangered;
+
+}
+.col-md-8 #description p{
+    margin: 0 0 10px;
+    color: rgb(109, 105, 105);
+
+}
+.col-md-8 .body {
+    font-family: unset;
+    font-size: 20px;
+    color: #555;
+}
+.col-md-8 #titre_connexe {
+    color: #0a58ca;
+    text-decoration: none;
+    font-weight: bolder;
+}
+.col-md-4 .connexe {
+    margin-bottom: 25px;
+    
+}
+.col-md-2 #btn-comment {
+    margin: 0;
+    height: 50px;
+}
+#coment{
+    max-width: 85%;
+
+}
+#coment #comment-user{
+    color: rgb(160, 84, 56);
+    font-size: 20px;
+
+}

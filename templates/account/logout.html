@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{% block css%}
+  <style>
+    .logout{
+      margin-top:10% ;
+      margin-bottom: 45%;
+    }
+  </style>
+{%endblock%}
+
+{% block content %}
+<center>
+  <div class="logout">
+    <h1>{% trans 'Etes-vous sur de vouloir vous deconnecter?' %}</h1>
+    <form method="post" action="{% url 'account_logout' %}">
+      {% csrf_token %}
+      {% if redirect_field_value %}
+      <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+      {% endif %}
+      <button type="submit" class="btn mt-5"><b>{% trans 'Sign Out' %}</b></button>
+    </form>
+  </div>
+  
+</center>
+
+
+{% endblock %}

@@ -1,0 +1,79 @@
+
+{% extends 'base.html'%}
+{% load static %}
+{% block css%}
+    <link rel="stylesheet" href="{% static 'event-detail.css' %}"/>
+{% endblock css%}
+
+{% load crispy_forms_tags%}
+{% block content%}<div class="container content">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="row">
+                <div class="description">
+                    <h3><a href="{% url 'profile' forum.user%}" class="btn">@{{  forum.user}}</a></h3>
+                </div>
+                <div class="body">
+                    {{ forum.description}}
+                </div>
+                {% if request.user == forum.user %}
+                    <a href="{% url 'forum_delete' forum.pk%}">
+                        <img src="/media/delete.png" width="30px"/>
+                    </a>
+                {% endif %}
+                    <form method="POST">
+                        <div class="row mt-5">
+                            <div class="col-md-5">
+                                {% csrf_token%}
+                                {{form | crispy}} 
+                                <input type="submit" value="commenter" class="btn btn-secondary">
+
+                            </div>
+                        </div>
+                    </form>    
+            </div>
+
+            {% if comments%}
+                <h4 class="mt-5">Commentaires:</h4>
+            {%endif%}
+            {% for  comment in  comments%}
+                {%if comment.is_parent%}
+                    <div class="row">
+                        <small>
+                            {% if request.user == comment.user %}
+                                <a href="{% url 'forum_comment_delete' forum.pk comment.pk%}" id="texte">supprimer</a>
+                            {% endif %}
+                        </small> 
+                        <p>
+                            <strong>@{{  comment.user }} </strong>{{ comment.comment }}
+                        </p>
+                        {%for child_comment in comment.children%}
+                            <div class="m-5">
+                                <p><strong>{{  comment.user }} </strong>{{ comment.comment }}</p>
+                                {% if request.user == child_comment.user %}
+                                    <a href="{% url 'comment_delete' forum.user.username forum.pk child_comment.pk%}" id="texte">supprimer</a>
+                                {% endif %}
+                            </div>
+                        {%endfor%}
+                    </div> 
+
+                {%endif%}    
+            {%endfor%}
+    </div>
+    <div class="col-md-4">
+        <div class="row">
+            <h4 id="titre_evenement">Forums connexes</h4>
+            {%for forum in forums_connexe%}
+            <div class="m-2">   
+                <a href="{% url 'forum_detail' forum.url%}" id="texte" class="mt-2">                                                 
+                <a href="{% url 'profile' forum.user.username%}" class="txt">@{{ forum.user.username}}</a>
+                <p id="p_list">{{ forum.description | truncatechars:150}}</p>  
+                </a>                      
+            </div>                  
+            {%endfor%}
+         </div>
+
+    </div>
+    
+</div>
+{% endblock content%}

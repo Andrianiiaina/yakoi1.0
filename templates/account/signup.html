@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load static%}
+{%block content%}
+{% block css%}
+  <link rel="stylesheet" href="{% static 'authenticati.css'%}">
+{%endblock%}
+<div class="container">
+  <center>
+    <div id="box">
+      <div id="tete">
+        <h3>S'inscrire</h3>
+        <p>Si vous avez deja un compte, veuillez vous <a href="{% url 'account_login' %}">connecter</a>. Merci!</p>
+      </div>
+      <form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="primaryAction" type="submit" >S'inscrire </button>
+      </form>
+    </div>
+<footer>
+  <center>
+    <h2>YaKoi</h2>
+  </center>
+</footer>
+{% endblock %}

@@ -1,0 +1,111 @@
+{% load static %}
+
+{% load custom_tags%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'bootstrap.css' %}"/>
+    <link rel="stylesheet" href="{% static 'appp.css' %}"/>
+
+    {% block css %}
+    {% endblock css%}
+    <title>Yakoi</title>
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar navbar-expand-lg bg-light fixed-top">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#"><img src="/media/az.png" width="50px" height="40px"/></a>
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link link-secondary px-2" href="{% url 'event_list'%}">Accueil</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link link-secondary px-2" href="{% url 'voyage_list'%}">Voyage organisé</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link link-secondary px-2" href="{% url 'forum_list'%}">Forum</a>
+                        </li>
+                       
+
+                        <li class="nav-item">
+                            <a class="nav-link link-secondary px-2" href="{% url 'calendar'%}">Le grand calendrier</a>
+                        </li>
+                        {% if request.user.is_authenticated%}
+                            <li class="nav-item dropdown">               
+                                {%show_notifications%}                              
+                            </li>   
+                        {%endif%}
+
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        {% if request.user.is_authenticated%}
+                          
+                            <li class="nav-item dropdown  px-5">
+                                <a href="#" class="dropdown-toggle nav-link link-secondary pr-5" id="navbarDropdown" data-bs-toggle="dropdown" role="button" aria-expanded="false">
+                                   plus</a>
+                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                     
+                                            <li class="dropdown-item-parent">
+                                                {% if request.user.is_authenticated and request.user == user%}
+                                                    <a class="dropdown-item" href="{% url 'profile' request.user.username%}">mon profile</a>
+                                                {%endif%}
+                                                <a class="dropdown-item" href="{% url 'account_logout' %}">Se deconnecter</a>
+                                            </li>
+                                           
+                                </ul>
+                            </li>
+                            
+                        </li>   
+                        {% else %}
+                            <li class="nav-item">
+                                <a class="nav-link link-secondary px-2" href="#">Se connecter</a>
+                            </li>
+                        {%endif%}    
+                    </ul>
+                    
+                </div>
+            </div>
+        </nav>
+    </div>
+  
+    <div class="container-fluid base">
+        {% if messages%}
+            {% for message in messages %}
+                <div class="alert alert-success">              
+                    {{message}}
+                </div>
+            {%endfor%}
+        {%endif%}
+        {% block content %}
+        {% endblock content%}
+
+    </div>
+    <div class="footer">
+        <center>
+            <h4>Yakoi!</h4>
+            <p>
+                © 2021 - Yakoi.fr - Tous droits réservés
+                
+
+            </p>     
+             <small> Qui sommes nous?| Tél: 0348450875 | e-mail: yakoi@gmail.com | facebook: Yakoi Madagascar |Devenir membre | Espace pro | Publicité | Partenariat |Organisateur d'évenement</small>
+  
+        </center>
+     </div>
+            
+   
+
+    <script src="{% static 'bootstrap2.js'%}" ></script>
+
+    <script src="{% static 'inde.js'%}"> </script>
+    
+    
+</body>

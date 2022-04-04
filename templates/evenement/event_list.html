@@ -1,0 +1,191 @@
+{% extends 'base.html'%}
+{% load static%}
+{% load crispy_forms_tags%}
+{% block css%}
+    <link rel="stylesheet" href="{% static 'event.css' %}"/>
+{% endblock css%}
+
+{% block content%}
+    <div class="container-fluid mt-0">
+        
+        <div class="marquee-rtl mt-0">
+            <div class="marquee-content">
+                {% for event in  events_week%}
+                <a href="" id="marquee-txt">
+                    <img src="{{event.image.first.image.url}}" width="70" height="40px" id="marquee-img"/>
+                    {{event.titre}}</a>
+                {%endfor%}                                                 
+            </div>
+            </div>
+        <!--barre de recherche-->
+
+        <div class="row row_search">
+            <div class="col-md-6">
+                <h3>Les activités et évènements YaKoi</h3>
+            </div>
+            <div class="col-md-6">
+                <form method="GET" action="{% url 'event_search'%}">   
+                    <input type="text" name="query" placeholder="Rechercher un evenement" id="search_input"/>
+                    <button type="submit" id="search1">rechercher</button>
+                </form>
+                
+            </div>
+        </div>
+
+        <button type="button" class="btn_i m-2">
+            <a href="{% url 'event_category' 'fete'%}" class="txt_i">
+                Spectacle & concert
+                <img src="/media/images/concert.png" width="50px" height="50px"/>
+            </a>
+        </button>
+        <button type="button"  class="btn_i m-2">
+            <a href="{% url 'event_category' 'sport'%}" class="txt_i">
+                Activité & Sport
+                <img src="/media/images/sport.jpg" width="50px" height="50px"/>
+            </a>
+        </button>
+        <button type="button"  class="btn_i m-2">
+            <a href="{% url 'event_category' 'excursion'%}" class="txt_i">
+                Excursion
+                <img src="/media/images/excursion.jpg" width="50px" height="50px"/>
+            </a>
+        </button>
+        <button type="button"  class="btn_i m-2">
+            <a href="{% url 'event_category' 'technologie'%}" class="txt_i">
+                Technologie
+                <img src="/media/images/technologie.jpg" width="50px" height="50px"/>
+            </a>
+        </button>
+        <button type="button"  class="btn_i m-2">
+            <a href="{% url 'event_category' 'salon'%}" class="txt_i">
+                Salon & conference
+                <img src="/media/images/salon.png" width="50px" height="50px"/>
+            </a>
+        </button>
+
+    </div>
+   
+    <div class="container mt-5">  
+        <div class="row">
+            <div class="col-md-3">
+                <h4><span>Filtrer les resultats</span></h4>
+                <div class="card" style="width: 100%">
+                    <div class="card-body">
+                        <form method="GET" action="{% url 'event_filtre'%}">
+                            <label for="region" class="form-label mt-2">Lieu</label>
+                            <select name="region" class="form-select mb-4" id="lieu">  
+                                <option value="all">Selectionner un lieu</option>
+                                {% for i in villes %}                     
+                                <option>{{i.name}}</option>
+                                {%endfor%}
+                            </select>
+        
+                            <label class="form-label">Type</label><br/>
+                            <input type="checkbox" name="activities[]" value="technologie"  class="form-check-input" id="exampleCheck"/>
+                            <label class="form-check-label ck" for="exampleCheck">Technologie & science</label></br>
+        
+                            <input type="checkbox" name="activities[]" value="art" class="form-check-input" id="exampleCheck1"/>
+                            <label class="form-check-label ck" for="exampleCheck1">Art & culture</label></br>
+        
+                            <input type="checkbox" name="activities[]" value="concert" class="form-check-input" id="exampleCheck2"/>
+                            <label class="form-check-label ck" for="exampleCheck2">Concert & spectacle</label><br/>
+        
+                            <input type="checkbox" name="activities[]" value="sport" class="form-check-input" id="exampleCheck3"/>
+                            <label class="form-check-label ck" for="exampleCheck3">Sport &t bien etre</label><br/>
+        
+                            <input type="checkbox" name="activities[]" value="loisir" class="form-check-input" id="exampleCheck4"/>
+                            <label class="form-check-label ck" for="exampleCheck4">Loisir & divertissement</label><br/>
+        
+                            <input type="checkbox" name="activities[]" value="salon" class="form-check-input" id="exampleCheck5"/>
+                            <label class="form-check-label ck" for="exampleCheck5">Salon & atelier</label><br/>
+        
+                            <input type="checkbox" name="activities[]" value="autres" class="form-check-input" id="exampleCheck6"/>
+                            <label class="form-check-label ck" for="exampleCheck6">Divers</label></br>
+                            
+                            <label for="jour" class="form-label">Quand?</label>
+                            <select name="jour" class="form-select mb-4" id="jour">                      
+                                <option value="0">Prochainement</option>
+                                <option value="1">Aujourd'hui</option>
+                                <option value="2">Demain</option>
+                                <option value="3">Ce week-end</option>
+                                <option value="4">Cette semaine</option>
+        
+                            </select>
+        
+        
+        
+                            <label for="tarif" class="form-label">Tarif maximum (ar)</label>
+                            <input type="number" name="tarif" id="tarif" class="form-control mb-4" value="100000">
+        
+                            <button type="submit" class="btn btn-secondary" >Appliquer le filtre</button>
+                            
+                        </form>
+                    </div>
+                </div>
+
+                <h5 id="titre" class="mt-5"><span>Rechercher par mot cles</span></h5>
+                <form method="POST" action="{% url 'semantic_filter' %}">
+                    {% csrf_token %}
+                    <div class="card" style="width: 100%">
+                        <div class="card-header  card1">
+                            <div id="MyDiv2" >     
+                            </div>
+                        </div>
+
+                        <div class="card-header btn1">
+                            <button type="submit" class="btn btn2">Rechercher</button>
+                        </div>
+                        
+                        <div class="card-body">
+                            
+                        
+                            <div id="MyDiv">
+                                {%for i in tags%}                 
+                                    <button type="button" id="pp{{i.id}}" name="tagger">
+                                        <input type="checkbox" id="p{{i.id}}" value="{{i.name}}" name="rc[]"/>
+                                        <label for="p{{i.id}}" class="form-check-label a">{{i.name}}</label>
+                                    </button>
+                                {%endfor%}
+                            </div> 
+                        </div>
+                    </div>
+                </form>
+
+
+            </div>
+            <div class="col-md-9">
+                {% for event in  evenements%}
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <img src="{{event.image.first.image.url}}" class="img_event" width="100%" height=""/>                                             
+                            </div>
+                            <div class="col-md-8">
+                                    <h5>
+                                        <a href="{% url 'event_detail' event.user.username event.url%}" id="titre_evenement_list">{{ event.titre}} </a>
+                                    </h5>                      
+                                    <p  id="description">          
+                                        <a id="profile_lien">A {{event.lieu}} le {{ event.date}}</a><br/>   
+                                        {{ event.description| truncatechars:350}}   
+                                    </p>          
+                                    <p >
+                                        <small class="text-muted"> 
+                                            <a href="{% url 'profile' event.user%}" class="txt">@{{ event.user.username}}</a> |  <a href="" class="txt">{{event.category}}</a> | {{event.likes.all.count}} like                              
+                                        </small>
+                                    </p>
+                                
+                            </div>
+                        
+                        </div>
+                    </div>
+                    
+                </div>
+        {%endfor%}                               
+          
+        </div>
+    </div> 
+      </div>
+</div>
+
+{% endblock content%}

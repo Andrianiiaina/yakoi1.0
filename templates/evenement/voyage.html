@@ -1,0 +1,101 @@
+
+{% extends 'base.html'%}
+{% load static%}
+{% load crispy_forms_tags%}
+{% block css%}
+    <link rel="stylesheet" href="{% static 'event.css' %}"/>
+{% endblock css%}
+{% block content%}
+
+<div class="tete">
+    <div class="container">
+        <form method="GET" action="{% url 'voyage_filtre'%}">
+            <div class="row">
+            <div class="offset-1 col-md-2">
+                <label for="region" class="form-label tt">Lieu</label>
+                <select name="region" class="form-select" id="region">                       
+                    <option value="all">Tout les lieux</option>
+                    <option>Ambatomaro</option>
+                    <option>Antsobolo</option>
+                    
+                </select>
+            </div>
+            
+            <div class="col-md-2">
+                <label for="tarif" class="form-label tt">Tarif maximum</label>
+                <input type="number" name="tarif" placeholder="tarif maximum" id="tarif" class="form-control">
+            </div>
+    
+            <div class="col-md-2" >
+                <label for="date" class="form-label tt">Date debut</label>
+                <input type="date" name="date" id="date" class="form-control"/>
+            </div>
+    
+            <div class="col-md-2" >
+                <label for="datefin" class="form-label tt">Date fin</label>
+                <input type="date" name="date" id="date" class="form-control"/>
+            </div>
+            
+            <div class="col-md-3">
+                <p>.</p>
+                <button type="submit" class="btn btn-filter">Appliquer le filtre</button>
+            </div>
+        </div>
+        </form>
+    </div>
+    
+</div>
+<div class="container">
+    <div class="row mb-3">
+        <div class="col-md-5">
+            <h3>Les voyages organisés YaKoi</h3>
+        </div>
+        <div class="col-md-7">
+            
+        </div>
+    </div>
+        
+</div>
+
+<div class="container">
+    <div class="row">
+        {% for voyage in  voyages%}
+            <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-7">
+                                <div style="position:relative;text-align:center;">
+                                    <img src="{{voyage.image.first.image.url}}" alt="Cingue Terre" style="width:100%;height:350px;border-radius: 8px;" >
+                        
+                                    <div style="position:absolute;top:8px;right:16px;font-size:18px;color:white;border: 1px solid grey;padding:10px;border-radius: 5px;">
+                                        {{voyage.tarif}} Ar
+                                    </div>
+                                </div>                                            
+                            </div>
+                            
+                            <div class="col-md-5">
+                                
+                                <a id="profile_lien"> Du {{ voyage.date}} au {{voyage.datefin}} à {{voyage.lieu}}</a><br/>   
+                                    <h5>
+
+                                        <a href="{%url 'event_detail' voyage.user.username voyage.url%}" id="titre_evenement">{{ voyage.titre}} </a>
+                                    </h5>   
+                                    <p  id="description">          
+                                        {{ voyage.description| truncatechars:350}}   
+                                    </p>          
+                                    <p >
+                                        <small class="text-muted"> 
+                                            <a href="{% url 'profile' voyage.user.username%}" class="txt">@{{ voyage.user.username}}</a> |  {{voyage.category}} | {{voyage.likes.all.count}} like                              
+                                        </small>
+                                    </p>
+                                    
+                                
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        {%endfor%}                               
+          
+    </div>
+</div>
+{% endblock content%}

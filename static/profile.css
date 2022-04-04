@@ -1,0 +1,65 @@
+/*
+
+#like{
+    background: transparent;
+    border: none;
+    font-family: sans-serif;
+    font-size: 14px;
+    color: gray;
+}
+*/
+
+.information >img #img_profile {
+    border-radius: 14px;
+}    
+.information #pseudo{
+    color: #41464b;
+}
+.information #bio{
+    border: 1px solid #6c757d5c;
+    color: #6c757d;
+    padding: 15px;
+    font-family: initial;
+}
+.publication >h2{
+    color: #41464b;
+    font-size: 30px;
+    padding: 20px;
+    font-family: serif;
+    font-weight: 400; 
+    margin-top: 50px;
+}
+.publication img{
+    border-radius: 5px;
+}
+.publication #lieu{
+    font-family: sans-serif;
+    font-size: 11px;
+    color: gray;
+}
+.publication #titre{
+    color:#d65814;
+    text-decoration: none;
+    font-family: serif;
+    font-weight: bolder;
+    margin: 0;
+    padding: 0;
+}
+.publication .badge {
+    color: #41464b;
+}
+
+
+.publication .card .card_gallery .img_gallery:hover{
+    border-radius: 20px;
+    filter: grayscale(60%);
+
+}
+.publication .card .card_gallery .img_gallery{
+    border-radius: 10px;
+
+}
+.publication .card .card_gallery {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    padding: 10px;
+}
