@@ -1,0 +1,25 @@
+
+                <form method="POST" action="{% url 'tri_event' %}">
+                    {% csrf_token %}
+                <div class="card" style="width: 100%">
+                    <div class="card-header  card1">
+                        <div id="MyDiv2" >     
+                        </div>
+                    </div>
+
+                    <div class="card-header btn1">
+                        <button type="submit" class="btn btn2">Rechercher</button>
+                    </div>
+                    
+                    <div class="">
+                        <div id="MyDiv">
+                            {%for i in tags%}                 
+                                <button type="button" id="pp{{i.id}}" name="tagger" class="filtre_btn">
+                                    <input type="checkbox" id="p{{i.id}}" value="{{i.name}}" name="rc[]"/>
+                                    <label for="p{{i.id}}" class="form-check-label a">{{i.name}}</label>
+                                </button>
+                            {%endfor%}
+                        </div> 
+                    </div>
+                   </div>
+                </form>

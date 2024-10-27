@@ -12,12 +12,11 @@ from django.http import HttpResponseRedirect, HttpResponse
 from .models import UserProfile,Image,Gallery
 from .forms import ProfileForm,  GalleryForm, NewUserForm
 from Evenement.models import Notification
-from Evenement.forms import EventForm, VoyageForm
+from Evenement.forms import EventForm, EventForm
 from socialnetwork.cryptage import cryptage, decryptage,cryptage_url,decryptage_url
 from Evenement.models import Evenement
 from django.views.generic.edit import UpdateView,DeleteView
 from django.core.paginator import Paginator
-# Create your views here.
 
 
 class ProfileView(View):
@@ -33,7 +32,7 @@ class ProfileView(View):
         galleryForm=GalleryForm()
         followers = profile.followers.all()
         form_evenement=EventForm()
-        form_voyage=VoyageForm()
+        form_voyage=EventForm()
 
         act=[]
         activities=profile.activities
@@ -162,7 +161,7 @@ class GalleryView(LoginRequiredMixin, View):
        
         
         if form.is_valid():
-            titre = form.cleaned_data['titre']
+            title = form.cleaned_data['title']
             new_gallery = form.save(commit=False)
             new_gallery.user = request.user
             new_gallery.save()

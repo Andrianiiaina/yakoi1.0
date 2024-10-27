@@ -6,7 +6,7 @@ h2 {
     font-weight: 400; 
 }
 
-#titre {
+#title {
     color:#d65814;
     text-decoration: none;
     font-family: serif;
@@ -170,12 +170,12 @@ button.btn2  {
 h4 span{
     color: orangered;
 }
-#titre_evenement {
+#title_evenement {
     color: #134999;
     text-decoration: none;
     font-weight: bolder;
 }
-#titre_evenement_list{
+#title_evenement_list{
     color: #134999;
     text-decoration: none;
     font-weight: bolder;

@@ -7,7 +7,6 @@ from django.dispatch import receiver
 class Forum(models.Model):
     user= models.ForeignKey(User,null=False, on_delete=models.CASCADE,default=1)
     description=models.TextField()
-    url=models.CharField(default="tsisy",max_length=500)
     category=models.CharField("category", max_length=500, default="autres")
     create_on=models.DateField(default=timezone.now)
     def __str__(self):

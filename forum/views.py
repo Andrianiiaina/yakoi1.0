@@ -40,20 +40,12 @@ class ForumListView(View):
             new_forum = form.save(commit=False)
             new_forum.user = request.user
             messages.success(request, "le forum a bien été enregitré!")
-            new_forum.save()
-            new_forum.url = cryptage(new_forum.pk)      
-            new_forum.save() 
-
-        context = {
-            'forum_list':forums,
-            'form':form,
-        }
-            
-        return redirect('forum_detail',url=new_forum.url,)                
+            new_forum.save()              
+            return redirect('forum_detail',pk=new_forum.pk)      
+        return           
 class ForumDetailView(View):
-    def get(self,request,url, *args,**kwargs):
-        p=int(decryptage(url))
-        forum=Forum.objects.get(pk=p)
+    def get(self,request,pk, *args,**kwargs):
+        forum=Forum.objects.get(pk=pk)
         forums_connexe=Forum.objects.filter(category=forum.category)
         form = CommentForm()
 
@@ -66,7 +58,7 @@ class ForumDetailView(View):
         }
         return render(request,'forum/forum_detail.html', context)
 
-    def post(self,request,url, *args,**kwargs):
+    def post(self,request,pk, *args,**kwargs):
         pk=decryptage(url)
         forum=Forum.objects.get(pk=pk)
         form = CommentForm(request.POST)

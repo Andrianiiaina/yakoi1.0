@@ -22,7 +22,6 @@ from Evenement.views import EventListView
 
 urlpatterns = [
     path('yakoi/',include('forum.urls')),
-    path('', EventListView.as_view(), name='event_list'),
     path('admin/', admin.site.urls),
     path('accounts/',include('allauth.urls')),
     path('yakoi/',include('Evenement.urls')),

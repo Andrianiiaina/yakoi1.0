@@ -40,10 +40,10 @@ class ProfileForm(forms.ModelForm):
 
 
 class GalleryForm(forms.ModelForm):
-    titre = forms.CharField(
+    title = forms.CharField(
         max_length=100,
         min_length=5,
-        label='titre',
+        label='title',
 
     )
 
@@ -55,7 +55,7 @@ class GalleryForm(forms.ModelForm):
     )
     class Meta:
         model = Gallery
-        fields=["titre","image"]
+        fields=["title","image"]
 
 class NewUserForm(UserCreationForm):
     

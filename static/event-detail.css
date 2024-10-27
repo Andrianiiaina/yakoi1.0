@@ -13,12 +13,12 @@
     margin-bottom: 25px;
 }
 
-#titre_connexe {
+#title_connexe {
     color: #0a58ca;
     text-decoration: none;
     font-weight: bolder;
 }
-#titre_evenement {
+#title_evenement {
     color: orangered;
 }
 #date {
@@ -45,6 +45,6 @@ textarea#id_comment {
 #comment{
     max-width: 85%;
 }
-#lieu-h2{
+#location-h2{
     color: orangered;
 }

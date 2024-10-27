@@ -11,17 +11,17 @@
         <form method="GET" action="{% url 'voyage_filtre'%}">
             <div class="row">
             <div class="offset-1 col-md-2">
-                <label for="region" class="form-label tt">Lieu</label>
+                <label for="region" class="form-label tt">location</label>
                 <select name="region" class="form-select" id="region">                       
-                    <option value="all">Tout les lieux</option>
+                    <option value="all">Tout les locationx</option>
                     <option>Ambatomaro</option>
                     <option>Antsobolo</option>
                 </select>
             </div>
             
             <div class="col-md-2">
-                <label for="tarif" class="form-label tt">Tarif maximum</label>
-                <input type="number" name="tarif" placeholder="tarif maximum" id="tarif" class="form-control">
+                <label for="tariff" class="form-label tt">tariff maximum</label>
+                <input type="number" name="tariff" placeholder="tariff maximum" id="tariff" class="form-control">
             </div>
     
             <div class="col-md-2" >
@@ -30,7 +30,7 @@
             </div>
     
             <div class="col-md-2" >
-                <label for="datefin" class="form-label tt">Date fin</label>
+                <label for="end_date" class="form-label tt">Date fin</label>
                 <input type="date" name="date" id="date" class="form-control"/>
             </div>
             
@@ -74,17 +74,17 @@
                                     <img src="{{event.image.first.image.url}}" alt="Cingue Terre" style="width:100%;height:350px;border-radius: 8px;" >
                         
                                     <div style="position:absolute;top:8px;right:16px;font-size:18px;color:white;border: 1px solid grey;padding:10px;border-radius: 5px;">
-                                        {{event.tarif}} Ar
+                                        {{event.tariff}} Ar
                                     </div>
                                 </div>                                            
                             </div>
                             
                             <div class="col-md-5">
                                 
-                                <a id="profile_lien"> Du {{ event.date}} au {{event.datefin}} à {{event.lieu}}</a><br/>   
+                                <a id="profile_lien"> Du {{ event.date}} au {{event.end_date}} à {{event.location}}</a><br/>   
                                     <h5>
 
-                                        <a href="{%url 'event_detail' event.user.username event.url%}" id="titre_evenement_list">{{ event.titre}} </a>
+                                        <a href="{%url 'event_detail' event.pk%}" id="title_evenement_list">{{ event.title}} </a>
                                     </h5>   
                                     <p  id="description">          
                                         {{ event.description| truncatechars:500}}   

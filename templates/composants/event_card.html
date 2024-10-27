@@ -1,0 +1,21 @@
+
+        <div class="row">
+            <div class="col-md-4">
+                <img src="{{evenement.image.first.image.url}}" class="img_event" width="100%" height=""/>                                             
+            </div>
+            <div class="col-md-8">
+                    <h5>
+                        <a href="{% url 'event_detail' evenement.pk%}" id="title_evenement_list">{{ evenement.title}} </a>
+                    </h5>                      
+                    <p  id="description">          
+                        <a id="profile_lien">A {{evenement.location}} le {{ evenement.date}}</a><br/>   
+                        {{ evenement.description| truncatechars:350}}   
+                    </p>          
+                    <p >
+                        <small class="text-muted"> 
+                            <a href="{% url 'profile' evenement.user.username %}" class="txt">@{{ evenement.user.username}}</a> |  <a href="{% url 'event_category' evenement.category%}" class="txt">{{evenement.category}}</a> | {{evenement.likes.count}} like                              
+                        </small>
+                    </p>
+                
+            </div>
+</div>

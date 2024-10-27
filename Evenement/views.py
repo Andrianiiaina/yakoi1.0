@@ -2,33 +2,23 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views import View
 from django.db.models import Q
-from django.http import HttpResponseRedirect, HttpResponse, Http404
-from .models import Evenement, Comment, Notification, Image, Tag, Ville
+from django.http import HttpResponseRedirect, HttpResponse
+from .models import Evenement, Comment, Notification, Image, Tag, Ville, Like
 from Profile.models import UserProfile
-from .forms import EventForm, CommentForm, VoyageForm
+from .forms import EventForm, CommentForm, EventForm
 from django.views.generic.edit import UpdateView, DeleteView
 from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from django.core.paginator import Paginator
 from socialnetwork.cryptage import cryptage_url, decryptage_url
 from django.contrib import messages
-from django.utils.dateparse import parse_date
-from django.views.generic.dates import WeekArchiveView
 from django.db.models import Count
 import datetime
 
-#test si l'urn decrypter est de type int
-def test_user(url):
-    try:
-        pk=int(decryptage_url(url))
-    except pk.DoesNotExist:
-        raise Http404("cet evenement n'existe pas")  
-    return pk
-
 class EventListView(View):
     def get(self, request, *args,**kwargs):
-        evenements=Evenement.objects.all().exclude(date__lte=datetime.date.today()+datetime.timedelta(days=-1)).filter(datefin__isnull=True).order_by('-create_on')[:10]
+        evenements=Evenement.objects.all().exclude(date__lte=datetime.date.today()+datetime.timedelta(days=-1)).filter(end_date__isnull=True).order_by('-create_on')[:10]
         
-        a=Evenement.objects.filter(titre="")
+        filtered_event=Evenement.objects.filter(title="")
 
         if request.user.is_authenticated:
             profile=UserProfile.objects.get(pk=request.user.pk)
@@ -38,15 +28,15 @@ class EventListView(View):
             #personnalisation des evenents selon les activites de l'utilisateur
             if profile.activities:
                 for i in profile.activities.split(','):
-                    a= a | Evenement.objects.filter(category=i)            
-                evenements=a.exclude(date__lte=datetime.date.today()+datetime.timedelta(days=-1)).filter(datefin__isnull=True)
+                    filtered_event= filtered_event | Evenement.objects.filter(category=i)            
+                evenements=filtered_event.exclude(date__lte=datetime.date.today()+datetime.timedelta(days=-1)).filter(end_date__isnull=True)
 
         tags=Tag.objects.all().order_by('name')
         #recuperation des evenements chaque semaine
-        date_du_jour=datetime.date.today()
-        start_week = date_du_jour - datetime.timedelta(date_du_jour.weekday())
+        today_date=datetime.date.today()
+        start_week = today_date - datetime.timedelta(today_date.weekday())
         end_week=start_week + datetime.timedelta(7)
-        events_week=Evenement.objects.filter(date__range=[start_week, end_week]).exclude(date__lte=date_du_jour+datetime.timedelta(days=-1))
+        events_week=Evenement.objects.filter(date__range=[start_week, end_week]).exclude(date__lte=today_date+datetime.timedelta(days=-1))
         
         villes=Ville.objects.all().order_by('name')
        
@@ -63,7 +53,7 @@ class EventListView(View):
         form = EventForm(request.POST)
         files = request.FILES.getlist('image')
         if form.is_valid():
-            titre = form.cleaned_data['titre']
+            title = form.cleaned_data['title']
             new_event = form.save(commit=False)
             new_event.user = request.user
             new_event.category = request.POST.get('category')
@@ -74,9 +64,9 @@ class EventListView(View):
             
             new_event.url=cryptage_url(new_event.pk)
             new_event.create_tags()      
-            villes=Ville.objects.filter(name=new_event.lieu).first()
+            villes=Ville.objects.filter(name=new_event.location).first()
             if villes is None:
-                Ville.objects.create(name=new_event.lieu)
+                Ville.objects.create(name=new_event.location)
                 
             for f in files:
                 img=Image(image=f)
@@ -99,8 +89,7 @@ class EventListView(View):
 
 
 class EventDetailView(View):
-    def get(self,request,url, *args,**kwargs):
-        pk=int(decryptage_url(url))
+    def get(self,request,pk, *args,**kwargs):
         evenement= Evenement.objects.get(pk=pk)
         
         form = CommentForm()
@@ -116,8 +105,8 @@ class EventDetailView(View):
         }
 
         return render(request, 'evenement/event_detail.html', context)
-    def post(self,request,url, *args,**kwargs):  
-        pk=test_user(url)
+    #create_comments
+    def post(self,request,pk, *args,**kwargs):  
         evenement=Evenement.objects.get(pk=pk)    
         form = CommentForm(request.POST)
         if form.is_valid():
@@ -131,7 +120,7 @@ class EventDetailView(View):
             'comments':comments,
             'form':form,
         }    
-        return redirect('event_detail',username=evenement.user.username,url=url)       
+        return redirect('event_detail',pk=pk)       
 
 class EventDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
     model=Evenement
@@ -143,13 +132,12 @@ class EventDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
 
 class EventEditView(LoginRequiredMixin,UserPassesTestMixin, UpdateView):
     model= Evenement
-    fields=["titre","description","lieu","date"]
+    fields=["title","description","location","date"]
     template_name = 'edit.html'
    
     def get_success_url(self):
         pk=self.kwargs['pk']
-        username=self.kwargs['username']
-        return reverse_lazy('event_detail', kwargs={'username':username, 'url':cryptage_url(pk)})
+        return reverse_lazy('event_detail',kwargs={'pk':pk})
     def test_func(self):
         event=self.get_object()
         return self.request.user == event.user  
@@ -159,27 +147,21 @@ class CommentDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
     template_name='delete.html' 
 
     def get_success_url(self):
-        pk=self.kwargs['event_pk']
-        username=self.kwargs['username']
-        return reverse_lazy('event_detail', kwargs={'username':username,'url':cryptage_url(pk)})
+        event_pk=self.kwargs['event_pk']
+        pk=self.kwargs['pk']
+        return reverse_lazy('event_detail', kwargs={'pk':event_pk})
     def test_func(self):
         event=self.get_object()
         return self.request.user == event.user
 
 class AddLike(LoginRequiredMixin, View):
-    def post(self, request,url,*args,**kwargs):
-        pk=test_user(url)
-        evenement= Evenement.objects.get(pk=pk)
-        is_like = False
-        for like in evenement.likes.all():
-            if like == request.user:
-                is_like = True
-                break
-        if not is_like:  
-            evenement.likes.add(request.user)
+    def post(self, request,pk,*args,**kwargs):
+        evenement=Evenement.objects.get(pk=pk)
+        like, created= Like.objects.get_or_create(user_id=request.user.pk, event_id=pk)
+        if created: 
             notification=Notification.objects.create(notification_type=1, from_user=request.user, to_user=evenement.user,evenement=evenement)
-        if is_like:
-            evenement.likes.remove(request.user) 
+        else:
+            like.delete() 
         next = request.POST.get('next','/')
         return HttpResponseRedirect(next)   
 
@@ -225,74 +207,55 @@ class RemoveNotification(View):
         return HttpResponse('Success', context_type='text/plain')
 
 #le grand calendrier
-class EvenementListView(View):
+class BigCalendarListView(View):
     def get(self, request, *args,**kwargs):
 
-        evenements = Evenement.objects.all().exclude(date__lte=datetime.date.today()+datetime.timedelta(days=-1)).order_by('date')
-        #les evenemnts qui a le plus de like
-        celebrate_evenements=Evenement.objects.all().annotate(like=Count('likes')).order_by('-like')[:8]  
+        evenements_ = Evenement.objects.exclude(date__lte=datetime.date.today()+datetime.timedelta(days=-1)).order_by('date')
+        
+        famous_events=Evenement.objects.annotate(num_like=Count('likes')).order_by('-num_like')[:8]  
 
-        paginator = Paginator(evenements, 10)
+        paginator = Paginator(evenements_, 10)
         page_number = request.GET.get('page')
-        evenements_obj = paginator.get_page(page_number)
-
-        form =EventForm()
+        evenements = paginator.get_page(page_number)
         tags=Tag.objects.all()
         villes=Ville.objects.all().order_by()
 
         context= {
             'villes':villes,
-            'form':form,
-            'evenements_obj':evenements_obj,
+            'evenements':evenements,
             'tags':tags,
-            'c_evenements':celebrate_evenements,
+            'famous_events':famous_events,
         }
-        return render(request, 'evenement/evenements_list.html', context)
+        return render(request, 'evenement/big_calendar.html', context)
 
 class FiltreEvent(View):
     def get(self, request, *args, **kwargs):
-        date_du_jour=datetime.date.today()
+        today_date=datetime.date.today()
         categories=self.request.GET.getlist('activities[]')
-        lieu=self.request.GET.get('region')
+        location=self.request.GET.get('region')
         jour=self.request.GET.get('jour')
-        category=self.request.GET.get('type')
+        category_type=self.request.GET.get('type')
         x=Evenement.objects.all()
         
-        if category != 'all'and category is not None:
-            x=Evenement.objects.filter(category=category)
+        if category_type != 'all'and category_type is not None:
+            x=Evenement.objects.filter(category=category_type)
             
-
         if categories:   
             x=Evenement.objects.filter(category='')
             for i in categories:
                 if i != " ":
                     x =x | Evenement.objects.filter(category=i)
                  
-
-            
-        if jour == 0:
+        if jour == 'asc':
+            x=x & Evenement.objects.all()
+        elif jour == 'desc':
             x=x & Evenement.objects.all().order_by('-date')
-        elif jour == '1':
-            x=x & Evenement.objects.filter(date=date_du_jour)
-        elif jour == '2':
-            dt=date_du_jour+datetime.timedelta(days=1)
-            x=x & Evenement.objects.filter(date=dt)           
-        elif jour == '3':
-            start_week = date_du_jour - datetime.timedelta(date_du_jour.weekday())
-            end_week=start_week + datetime.timedelta(7)
-            x=x & Evenement.objects.filter(date__range=[start_week, end_week]) 
-        elif jour == '4':
-            dt=date_du_jour+datetime.timedelta(date_du_jour.weekday())
-            x=x & Evenement.objects.filter(date__range=[date_du_jour,dt])     
-         
-        try:
-            tarif_max=int(self.request.GET.get('tarif'))
-            x = x & Evenement.objects.filter(tarif__lte = tarif_max)
-        except:
-            pass
+        tariff_max=self.request.GET.get('tariff')
+        x = x & Evenement.objects.filter(tariff__lte = tariff_max)
+        
             
-        if lieu != 'all':
-            x = x & Evenement.objects.filter(lieu =lieu) 
+        if location != 'all':
+            x = x & Evenement.objects.filter(location =location) 
 
         context = {
         'publications': x,
@@ -358,8 +321,8 @@ class EvenementCategoryView(View):
 
 class VoyageListView(View):
     def get(self, request, *args,**kwargs):
-        form_voyage=VoyageForm()
-        evenements=Evenement.objects.filter(datefin__isnull = False)
+        form_voyage=EventForm()
+        evenements=Evenement.objects.filter(end_date__isnull = False)
         context= {
             'evenements':evenements,
             'formv':form_voyage,
@@ -367,13 +330,13 @@ class VoyageListView(View):
         return render(request, 'voyage.html', context)
 
     def post(self, request, *args,**kwargs):
-        form = VoyageForm(request.POST)
+        form = EventForm(request.POST)
         files = request.FILES.getlist('image')
         if form.is_valid():
             new_event = form.save(commit=False)
             new_event.user = request.user
              #seulement si le date de debut est < date fin
-            if new_event.date <= new_event.datefin:          
+            if new_event.date <= new_event.end_date:          
                 new_event.save()
                 messages.success(request, "l'événement  a bien été ajouté!")
                 new_event.url=cryptage_url(new_event.pk)
@@ -401,7 +364,7 @@ class VoyageListView(View):
 class VoyageSearch(View):
     def get(self, request, *args, **kwargs):
         query=self.request.GET.get('query')
-        publications=Evenement.objects.filter(Q(description__icontains=query)).filter(datefin__isnull=False).exclude(date__lte=datetime.date.today())
+        publications=Evenement.objects.filter(Q(description__icontains=query)).filter(end_date__isnull=False).exclude(date__lte=datetime.date.today())
         context = {
             'publications':publications,
         }
@@ -409,34 +372,34 @@ class VoyageSearch(View):
 
 class FiltreVoyage(View):
     def get(self, request, *args, **kwargs):
-        lieu=self.request.GET.get('lieu')
-        x=Evenement.objects.filter(datefin__isnull=False).exclude(date__lte=datetime.date.today())
+        location=self.request.GET.get('location')
+        x=Evenement.objects.filter(end_date__isnull=False).exclude(date__lte=datetime.date.today())
         if request.GET.get('date'):
             try:
                 date=self.request.GET.get('date')    
-                if request.GET.get('datefin'):
-                    x= x & Evenement.objects.filter(date__lte=datefin).filter(date__gte=date)                
+                if request.GET.get('end_date'):
+                    x= x & Evenement.objects.filter(date__lte=end_date).filter(date__gte=date)                
                 else:                
                     x= x & Evenement.objects.filter(date__lte=date)  
             except:
                 pass 
         else:
             try:
-                datefin=self.request.GET.get('datefin')            
-                x= x & Evenement.objects.filter(date__lte=datefin)  
+                end_date=self.request.GET.get('end_date')            
+                x= x & Evenement.objects.filter(date__lte=end_date)  
             except:
                 pass   
 
         try:
-            tarif_max=int(self.request.GET.get('tarif'))
-            x = x & Evenement.objects.filter(tarif__lte = tarif_max)
+            tariff_max=int(self.request.GET.get('tariff'))
+            x = x & Evenement.objects.filter(tariff__lte = tariff_max)
         except:
             pass        
         
-        if lieu is not None:
-            x = x & Evenement.objects.filter(lieu =lieu)  
+        if location is not None:
+            x = x & Evenement.objects.filter(location =location)  
 
-        y=Evenement.objects.filter(lieu =lieu)
+        y=Evenement.objects.filter(location =location)
         context = {
         'publications': x,
         'connexes': y,

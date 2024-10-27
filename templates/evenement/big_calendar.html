@@ -1,0 +1,51 @@
+{% extends 'base.html'%}
+{%load static%}
+
+{% load crispy_forms_tags%}
+{% block css%}
+    <link rel="stylesheet" href="{% static 'big_category.css' %}"/>
+
+{% endblock css%}
+
+
+{% block content%}
+<div class="tete">
+ 
+    {% include 'composants/filter_big_calendar.html' with villes=villes%}
+
+</div>
+<div class="container">
+    <div class="row">
+         <div class="col-md-8">
+            {% regroup evenements|dictsort:"date" by date as event_list %}
+                {% for event_ in event_list %}
+                            <h4><span>{{event_.grouper|date:"d F "}}</span></h4>
+                            {% for evenement in event_.list %}
+                                 {% include 'composants/event_card.html' with evenement=evenement%}
+                            {%endfor%}
+                {%endfor%}
+                {% include 'composants/pagination.html' with evenements=evenements%}
+            
+        </div>
+        <div class="col-md-4">    
+            <div class="row">               
+                <h4><span>{{"Les plus célèbres:"}}</span></h4>         
+                {% for famous_event in  famous_events%}
+                    <div class="col-md-3 mb-5">
+                        <img src="{{famous_event.image.first.image.url}}" class="img-fluid" height="60px"/>                                       
+                    </div>
+                    <div class="col-md-8">
+                        <a href="" id="title_evenement">{{ famous_event.title}}</a>
+                         <p id="p_list">{{ famous_event.description | truncatechars:50}}</p>
+                    </div>        
+                {%endfor%}
+            </div>
+              
+                    
+        </div>
+    </div>
+   
+</div>
+
+    
+{% endblock content%}

@@ -55,7 +55,7 @@
                                 <div class="m-5">
                                     <p><strong>{{  comment.user }} </strong>{{ comment.comment }}</p>
                                     {% if request.user == child_comment.user %}
-                                        <a href="{% url 'comment_delete' forum.user.username forum.pk child_comment.pk%}" id="texte">supprimer</a>
+                                        <a href="{% url 'forum_comment_delete' forum.pk child_comment.pk%}" id="texte">supprimer</a>
                                     {% endif %}
 
                                 </div>
@@ -69,11 +69,11 @@
 
     <div class="col-md-4">
         <div class="row">
-            <h2 id="titre">Forums connexes</h2>
+            <h2 id="title">Forums connexes</h2>
             {%for forum in forums_connexe%}
             <div class="m-2">   
-                <a href="{% url 'forum_detail' forum.url%}" id="texte" class="mt-2">                                                 
-                <a href="{% url 'profile' forum.user.username%}" class="txt">@{{ forum.user.username}}</a>
+                <a href="{% url 'forum_detail' forum.pk%}" id="texte" class="mt-2">                                                 
+                <a href="{% url 'profile' forum.user.pk%}" class="txt">@{{ forum.user.username}}</a>
                 <p id="p_list">{{ forum.description | truncatechars:150}}</p>  
                 </a>                      
             </div>                  

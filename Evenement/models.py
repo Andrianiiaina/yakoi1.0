@@ -7,19 +7,16 @@ from django.dispatch import receiver
 from forum.models import Forum
 class Evenement(models.Model):
     user= models.ForeignKey(User,null=False, on_delete=models.CASCADE)
-    titre=models.CharField("titre",max_length=50)
-    description=models.TextField()
+    title=models.CharField("title",max_length=50)
+    description=models.TextField(default="")
     image=models.ManyToManyField('Image', blank=True)
     date=models.DateField("date")
-    datefin=models.DateField(blank=True, null=True)
-    lieu=models.CharField("lieu",max_length=250)
-    tarif=models.CharField("tarif",default='0',max_length=250)
+    end_date=models.DateField(blank=True, null=True)
+    location=models.CharField("location",max_length=250,default="")
+    tariff=models.IntegerField("tariff",default=0)
     category=models.CharField("category", max_length=100,default="autres")
     create_on=models.DateField(default=timezone.now)
-    url=models.CharField(max_length=50,default="a")
-    likes = models.ManyToManyField(User, blank=True, related_name='Likes')
     tags = models.ManyToManyField('Tag',blank=True)
-
 
     def create_tags(self):
         for word in self.description.split():
@@ -34,7 +31,11 @@ class Evenement(models.Model):
                 self.save() 
 
     def __str__(self):
-        return self.titre
+        return self.title
+
+class Like(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    event= models.ForeignKey(Evenement, on_delete=models.CASCADE, related_name="likes")
 
 class Comment(models.Model): 
     comment = models.TextField()
@@ -61,7 +62,8 @@ class Notification(models.Model):
         user_has_seen = models.BooleanField(default=False)
         
 class Image(models.Model):
-    image = models.ImageField(upload_to='uploads/post_photos', blank=True, null=True)        
+    image = models.ImageField(upload_to='uploads/post_photos', blank=True, null=True)   
+
 class Tag(models.Model):
     name=models.CharField(max_length=255)  
 

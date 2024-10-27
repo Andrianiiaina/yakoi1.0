@@ -1,0 +1,47 @@
+<div class="container">
+    <form method="GET" action="{% url 'event_filtre'%}">
+     <div class="row">
+     <div class="offset-1 col-md-2">
+         <label for="region" class="form-label tt">location</label>
+         <select name="region" class="form-select mb-4" id="location">  
+             <option value="all">Selectionner un location</option>
+             {% for ville in villes %}                     
+                 <option>{{ville.name}}</option>
+             {%endfor%}
+         </select>
+     </div>
+     <div class="col-md-2">
+         <label for="type" class="form-label tt">Type</label>
+         <select name="type" class="form-select" id="type">
+             <option value="all">Tout type d'evenement</option>
+             <option value="technologie">Technologie & science</option>
+             <option value="excursion">Excursion</option>
+             <option value="concert">Concert & spectacle</option>
+             <option value="divertissement">Loisir & divertissement</option>
+             <option value="sport">Sport &t bien etre</option>
+             <option value="salon">Salon & atelier</option>
+             <option value="autres">Divers</option>
+
+         </select>
+     </div>
+     <div class="col-md-2">
+         <label for="tariff" class="form-label tt" >tariff maximum</label>
+         <input type="number" name="tariff" value="2000000" id="tariff" class="form-control">
+     </div>
+
+     <div class="col-md-2" >
+         <label for="jour" class="form-label tt">Ordre</label>
+         <select name="jour" class="form-select mb-4" id="jour">                      
+             <option value="asc">Croissant</option>
+             <option value="desc">Décroissant</option>
+
+         </select>
+     </div>
+     <div class="col-md-2">
+         <p>.</p>
+         <button type="submit" class="btn ttb">Appliquer le filtre</button>
+     </div>
+ </div>
+ </form>
+
+</div>

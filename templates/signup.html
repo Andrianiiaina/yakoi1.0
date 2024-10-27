@@ -16,7 +16,7 @@
           
           <form class="signup" method="post" action="{% url 'signup' %}">
             <center>
-              <h4 id="titre" class="mb-3">S'inscrire</h4>
+              <h4 id="title" class="mb-3">S'inscrire</h4>
             </center>
             {% csrf_token %}
            {{  register_form.as_p }}

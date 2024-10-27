@@ -51,7 +51,7 @@ class Migration(migrations.Migration):
             name='Gallery',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('titre', models.CharField(max_length=450, verbose_name='titre')),
+                ('title', models.CharField(max_length=450, verbose_name='title')),
                 ('image', models.ManyToManyField(blank=True, to='Profile.Image')),
                 ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],

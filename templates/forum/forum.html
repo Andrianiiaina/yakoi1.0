@@ -11,9 +11,9 @@
     <div class="row row_search mt-5 row2">
         <div class="col-md-6 mt-5 mb-2">
             <h2><span>Forum YaKoi</span></h2>
-            <p>Demander des renseignement, des conseils, poser vos questions, ou juste discuter avec les membres...</p>
+            <p>Demandez des renseignement, des conseils, posez vos questions, ou juste discutez avec les membres...</p>
            
-        {% if requeset.user.is_authenticate%}    
+        {% if request.user.is_authenticated%}    
         <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#createEvenementModal">
             Commencer une discussion
         </button>
@@ -76,7 +76,9 @@
                     
                           </div>
                         </div>
-                    <div class="pagination">
+                        {% include 'composants/pagination.html' with evenements=forums%}
+
+                    <!--div class="pagination">
                         <span class="step-links">
                             {% if forums.has_previous %}
                                 <a href="?page=1">&laquo; first</a>
@@ -90,7 +92,7 @@
                                 <a href="?page={{ forums.paginator.num_pages }}">last &raquo;</a>
                             {% endif %}
                         </span>
-                    </div>
+                    </div-->
                    
                 </div>
     </div>

@@ -34,7 +34,7 @@ class UserprofileFollowers(models.Model):
     
 class Gallery(models.Model):
     user= models.ForeignKey(User,null=False, on_delete=models.CASCADE)
-    titre=models.CharField("titre",max_length=450)
+    title=models.CharField("title",max_length=450)
     image=models.ManyToManyField('Image', blank=True)
 
 class Image(models.Model):

@@ -23,7 +23,7 @@ div#bio {
     margin-top: 50px;
 }
 
-#titre {
+#title {
     color:#d65814;
     text-decoration: none;
     font-family: serif;
@@ -42,7 +42,7 @@ a.btn.btn_plus {
     font-size: 14px;
     color: gray;
 }
-#lieu{
+#location{
         font-family: sans-serif;
         font-size: 11px;
         color: gray;

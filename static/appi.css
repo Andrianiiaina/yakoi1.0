@@ -31,7 +31,7 @@
     margin-bottom: 10px;
     border-radius: 20px;
 }
-.card .titre {
+.card .title {
     background: #154a54;
     padding: 25px;
     color: white;
@@ -105,7 +105,7 @@ label {
     font-size: 24px;
     color: orangered;
 }
-h1#titre{
+h1#title{
     color: orangered;
 
 }

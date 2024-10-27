@@ -17,23 +17,23 @@
                     {%endif%}
                 {%endfor%}                  
                
-                <h3 id="titre_evenement">{{ evenement.titre}}</h3>
+                <h3 id="title_evenement">{{ evenement.title}}</h3>
                 {% if request.user == evenement.user %}
-                    <a href="{% url 'event_edit' evenement.user.username evenement.pk%}"><img src="/media/edit.png" width="30px"/></a>
+                    <a href="{% url 'event_edit' evenement.pk%}"><img src="/media/edit.png" width="30px"/></a>
                     <a href="{% url 'event_delete' evenement.pk%}"><img src="/media/delete.png" width="30px" /></a>
                 {% endif %}
-                <p id="date"> à {{ evenement.lieu}} le {{ evenement.date}} | {{evenement.tarif}}ar git @<a href="{% url 'profile' evenement.user.username%}">{{  evenement.user }}</a></p>
+                <p id="date"> à {{ evenement.location}} le {{ evenement.date}} | {{evenement.tariff}}ar git @<a href="{% url 'profile' evenement.user.pk%}">{{  evenement.user }}</a></p>
             </center>
                 <div class="body">
                     <p>{{ evenement.description }}</p>
                 </div>
                 
                 {% if request.user.is_authenticated%}
-                <form method="POST" action="{% url 'like' evenement.url%}">
+                <form method="POST" action="{% url 'like' evenement.pk%}">
                     {%csrf_token%}
                     <input type="hidden" value="{{request.path}}" name="next"/>
                     <button type="submit" class="btn-txt">
-                        {{ evenement.likes.all.count }}like{{ pevenement.likes.all.count|pluralize }}.
+                        {{ evenement.likes.all.count }}like{{ evenement.likes.all.count|pluralize }}.
                     
                     </button>
                     {{ comments.all.count }} commentaire{{comments.all.count|pluralize }}.
@@ -44,7 +44,7 @@
 
             <!--champs commentaire + listes commentaires-->
                 
-            {% if requeset.user.is_authenticate%} 
+            {% if request.user.is_authenticated%} 
                 <form method="POST">
                     <div class="row">
                     <div class="offset-2 col-md-7">
@@ -57,6 +57,7 @@
                 </div>
                 </form>
             {%endif%}
+            
             <div class="row m-5">
                 {% for  comment in  comments%}
                     {%if comment.is_parent%}
@@ -68,7 +69,7 @@
 
                         <li class="dropdown">
                             {% if request.user == comment.user %}
-                                <a href="{% url 'comment_delete' evenement.user.username evenement.pk comment.pk %}" id="date">supprimer</a>
+                                <a href="{% url 'comment_delete' evenement.pk comment.pk %}" id="date">supprimer</a>
                             {% endif %}
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" id="date">repondre</a>
                             <ul class="dropdown-menu" role="menu">
@@ -86,7 +87,7 @@
                                     <p id="comment-user">{{child_comment.user}}</p>{{child_comment.comment}}
                                     <P id="date">{{comment.create_on}}</P>
                                     {% if request.user == child_comment.user %}
-                                        <a href="{% url 'comment_delete' evenement.user.username evenement.pk child_comment.pk%}" id="date">supprimer</a>
+                                        <a href="{% url 'comment_delete' evenement.pk child_comment.pk%}" id="date">supprimer</a>
                                     {% endif %}
 
                                 </div>
@@ -98,7 +99,7 @@
         </div>
         <div class="col-md-4">
             <div class="row">
-                <h4 id="titre_evenement">Connexes</h4>
+                <h4 id="title_evenement">Connexes</h4>
                 {%for event in evenements%}
                     <div class="row">
                         <div class="col-md-4 connexe">
@@ -111,7 +112,7 @@
                             {%endfor%}      
                         </div>
                         <div class="col-md-8">
-                            <a href="{%url 'event_detail' event.user.username event.url%}" id="titre_connexe">{{ event.titre}}</a>       
+                            <a href="{%url 'event_detail' event.pk%}" id="title_connexe">{{ event.title}}</a>       
                             <p id="p_list">{{ event.description | truncatechars:50}}</p>             
                         </div> 
                     </div>                  
