@@ -40,7 +40,7 @@
                                                                 <a href="{% url 'profile' forum.user.username%}" class="txt">@{{ forum.user.username}}</a>
                                                             </strong>
                                                             
-                                                    <a href="{% url 'forum_detail' forum.url%}" id="texte" class="mt-2">
+                                                    <a href="{% url 'forum_detail' forum.pk%}" id="texte" class="mt-2">
                                                             <p class="pb-3 mb-0 small lh-sm border-bottom">{{ forum.description | truncatewords:20}}</p>                                                                                           
                                                         </a> 
                                                         </div>  
@@ -54,12 +54,9 @@
             </div>
 
 
-                
 
             <!--modal creation d'evenement--> 
-            
-
-                <div class="modal fade" id="createEvenementModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="createEvenementModalLabel" aria-hidden="true">
+            <div class="modal fade" id="createEvenementModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="createEvenementModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
                           <div class="modal-content">
                             <div class="modal-header">
@@ -76,25 +73,8 @@
                     
                           </div>
                         </div>
-                        {% include 'composants/pagination.html' with evenements=forums%}
-
-                    <!--div class="pagination">
-                        <span class="step-links">
-                            {% if forums.has_previous %}
-                                <a href="?page=1">&laquo; first</a>
-                                <a href="?page={{ forums.previous_page_number }}">previous</a>
-                            {% endif %}
-                            <span class="current">
-                                Page {{ forums.number }} of {{ forums.paginator.num_pages }}.
-                            </span>
-                            {% if forums.has_next %}
-                                <a href="?page={{ forums.next_page_number }}">next</a>
-                                <a href="?page={{ forums.paginator.num_pages }}">last &raquo;</a>
-                            {% endif %}
-                        </span>
-                    </div-->
-                   
-                </div>
+                        {% include 'composants/pagination.html' with evenements=forums%}   
+            </div>
     </div>
 </div>
 

@@ -5,7 +5,6 @@ from django.contrib.auth.models import User
 from socialnetwork.cryptage import cryptage
 
 class ProfileForm(forms.ModelForm):
-  
     picture= forms.ImageField(
         required=False,
         widget=forms.ClearableFileInput(attrs={
@@ -14,7 +13,6 @@ class ProfileForm(forms.ModelForm):
     )
     bio= forms.CharField(
         max_length=500,
-        min_length=5,
         label='bio',
         widget=forms.Textarea(attrs={
             'rows':'3',
@@ -23,7 +21,6 @@ class ProfileForm(forms.ModelForm):
     )
     localisation = forms.CharField(
         max_length=100,
-        min_length=5,
         label='localisation',
 
     )
@@ -33,7 +30,6 @@ class ProfileForm(forms.ModelForm):
         label='contact',
 
     )
-   
     class Meta:
         model = UserProfile
         fields=["bio","localisation","picture","contact","nif","stat","cin"]
@@ -42,7 +38,6 @@ class ProfileForm(forms.ModelForm):
 class GalleryForm(forms.ModelForm):
     title = forms.CharField(
         max_length=100,
-        min_length=5,
         label='title',
 
     )
@@ -58,8 +53,6 @@ class GalleryForm(forms.ModelForm):
         fields=["title","image"]
 
 class NewUserForm(UserCreationForm):
-    
-    
 	email = forms.EmailField(required=True,label="E-mail")
 	username=forms.CharField(required=True,label="Identifiant")
 	password1=forms.CharField(label="Mot de passe",widget=forms.PasswordInput,required=True, min_length=6,max_length=20)

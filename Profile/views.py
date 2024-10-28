@@ -22,80 +22,34 @@ from django.core.paginator import Paginator
 class ProfileView(View):
     def get(self, request, username, *args,**kwargs):
         user=User.objects.get(username=username)
-        profile = UserProfile.objects.get(pk=user.pk)
-
-        evenements= Evenement.objects.all().filter(user=user).order_by('-create_on')    
-        paginator = Paginator(evenements, 10)
-        page_number = request.GET.get('page')
-        evenements_obj = paginator.get_page(page_number)
-
-        galleryForm=GalleryForm()
-        followers = profile.followers.all()
-        form_evenement=EventForm()
-        form_voyage=EventForm()
-
-        act=[]
-        activities=profile.activities
-        if activities:
-            for i in activities.split(','):
-                act.append(i)
-            
-        if len(followers)==0:
-            is_following=False
-        for follower in followers:
-            if follower == request.user:
-                is_following=True
-            else:
-                is_following = False    
-        number_of_followers = len(followers)
-
-        galleries=Gallery.objects.filter(user=user)
-        
-    
+        evenements= Evenement.objects.all().filter(user=user).order_by('-create_on')  
         context = {
-            'form_voyage':form_voyage,
-            'form_evenement':form_evenement,
-            'formgallery':galleryForm,
-            'profile':profile,
-            'evenements':evenements_obj,
-            'number_of_followers':number_of_followers,
-            'is_following':is_following,
-            'activities':act,
-            'galleries':galleries,
+            'form_evenement':EventForm(),
+            'formgallery':GalleryForm(),
+            'evenements':Paginator(evenements, 10).get_page(request.GET.get('page')),
+            'is_following':request.user.followers.filter(user_id=user.id).exists(),
+            'galleries':Gallery.objects.filter(user=user),
             'user':user,
-
         }
         return render(request, 'profile/profile.html', context)
 class ProfileEditView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model= UserProfile
-    fields=["bio","localisation","contact","picture"]
+    fields=["bio","localisation","activities","contact","picture"]
     template_name = 'profile/profile_edit.html'
     def get_success_url(self):
-        pk=self.kwargs['pk']
-        username=User.objects.get(pk=pk)
-        return reverse_lazy('profile', kwargs={'username':username})
-
+        return reverse_lazy('profile', kwargs={'username':self.request.user.username})
     def test_func(self):
         profile=self.get_object()
         activities=self.request.POST.getlist('activities[]')
-        s=''
-        for i in activities:
-            s=s+i+','
-        profile.activities=s
-        profile.lien=cryptage(profile.pk)
+        profile.activities=','.join(map(str,activities))
         profile.save()
 
         return self.request.user == profile.user 
 class ProfileRespoCreateView(LoginRequiredMixin,View):
     def get(self,request,*args,**kwargs):
-        form=ProfileForm()
-        context= {
-            'form':form,
-        }
-        return render(request, 'profile/profile_respo_create.html',context)
+        return render(request, 'profile/profile_respo_create.html',{'form':ProfileForm()})
     def post(self, request, *args,**kwargs):
         
-
         bio=request.POST.get('bio')
         nif=cryptage(str(request.POST.get('nif')))
         stat=cryptage(str(request.POST.get('stat')))
@@ -103,17 +57,11 @@ class ProfileRespoCreateView(LoginRequiredMixin,View):
         
         localisation=request.POST.get('localisation')
         contact=request.POST.get('contact')
-        lien=cryptage(request.user.pk)
         activities=request.POST.getlist('activities[]')
-        s=''
-        for i in activities:
-            s=s+i+','
-        fonction=True
-        profile = UserProfile.objects.get(pk=request.user)
+        activities=','.join(map(str,activities))
 
-        user=UserProfile(user=request.user, lien=lien,activities=s, bio=bio,localisation=localisation,nif=nif,stat=stat,cin=cin,contact=contact,fonction=fonction)
+        user=UserProfile(user=request.user, activities=activities, bio=bio,localisation=localisation,nif=nif,stat=stat,cin=cin,contact=contact,fonction=True)
         user.save() 
-        form=ProfileForm()
         return redirect('event_list')     
 
 
@@ -135,19 +83,13 @@ class UserSearch(View):
     def get(self, request, *args, **kwargs):
         query=self.request.GET.get('query')
         profile_list = UserProfile.objects.filter(Q(user__username__icontains=query))
-        context = {
-            'profile_list':profile_list,
-        }
-        return render(request, 'profile/search.html', context)
+        return render(request, 'profile/search.html', {'profile_list':profile_list})
 
 class ListFollowers(View):
     def get(self,request,pk,*args,**kwargs):
-        profile= UserProfile.objects.get(pk=pk)
-        followers = profile.followers.all()
-
         context = {
-            'profile':profile,
-            'followers': followers,
+            'profile':UserProfile.objects.get(pk=pk),
+            'followers': profile.followers.all(),
         }
         return render(request,'profile/list_followers.html',context)
 
@@ -155,11 +97,8 @@ class ListFollowers(View):
 
 class GalleryView(LoginRequiredMixin, View):
     def post(self, request, *args,**kwargs):
-
         form=GalleryForm(request.POST)
         files = request.FILES.getlist('image')
-       
-        
         if form.is_valid():
             title = form.cleaned_data['title']
             new_gallery = form.save(commit=False)
@@ -171,6 +110,7 @@ class GalleryView(LoginRequiredMixin, View):
                 new_gallery.image.add(img)
             new_gallery.save()
         return redirect('profile',username=new_gallery.user.username)   
+
 class GalleryDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
     model=Gallery
     template_name='delete.html'    
@@ -180,39 +120,6 @@ class GalleryDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
         gallery=self.get_object()
         return self.request.user == gallery.user 
 
-def register_request(request):
-    if request.user.is_authenticated:
-        return redirect('event_list')
-    if request.method == "POST":
-        form = NewUserForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            login(request, user)
-            return redirect("event_list")
-        else:    
-            messages.error(request, "information invalide.")
-
-    form = NewUserForm()
-    return render (request=request, template_name="signup.html", context={"register_form":form})
-
-def login_request(request):
-    if request.user.is_authenticated:
-        return redirect('event_list')
-    if request.method == "POST":
-
-
-        if User.objects.filter(username = request.POST['username']):
-            user=User.objects.get(username = request.POST['username'])
-            pas=decryptage(user.password)
-            if pas == request.POST['password']:
-                auth.login(request,user)
-                return redirect('event_list')
-            else:
-                 messages.error(request, "Mot de passe incorrecte.")  
-        else:
-             messages.error(request, "Identifiant incorrecte, veuilez verifier votre identifiant s'il vous plait.")
-
-    return render(request=request, template_name="login.html")	
 
 class AddNotification(LoginRequiredMixin, View):
     def post(self, request, pk, *args, **kwargs):

@@ -8,27 +8,8 @@
                 {% csrf_token%}
                 {{form | crispy}}
                 <h4>Activités</h4>
-                <input type="checkbox" name="activities[]" value="technologie"  class="form-check-input" id="exampleCheck"/>
-                    <label class="form-check-label" for="exampleCheck">Technologie & science</label></br>
-
-                    <input type="checkbox" name="activities[]" value="excursion" class="form-check-input" id="exampleCheck1"/>
-                    <label class="form-check-label" for="exampleCheck1">Excursion</label></br>
-
-                    <input type="checkbox" name="activities[]" value="concert" class="form-check-input" id="exampleCheck2"/>
-                    <label class="form-check-label" for="exampleCheck2">Concert & spectacle</label><br/>
-
-                    <input type="checkbox" name="activities[]" value="sport" class="form-check-input" id="exampleCheck3"/>
-                    <label class="form-check-label" for="exampleCheck3">Sport &t bien etre</label><br/>
-
-                    <input type="checkbox" name="activities[]" value="divertissement" class="form-check-input" id="exampleCheck4"/>
-                    <label class="form-check-label" for="exampleCheck4">Loisir & divertissement</label><br/>
-
-                    <input type="checkbox" name="activities[]" value="salon" class="form-check-input" id="exampleCheck5"/>
-                    <label class="form-check-label" for="exampleCheck5">Salon & atelier</label><br/>
-
-                    <input type="checkbox" name="activities[]" value="autres" class="form-check-input mb-5" id="exampleCheck6"/>
-                    <label class="form-check-label" for="exampleCheck6">Divers</label></br>
-                <input type="submit" value="Submit">
+                {% include 'profile/composants/check_activities.html'%}
+                 <input type="submit" value="Submit">
             </form>
         </div>
     </div>

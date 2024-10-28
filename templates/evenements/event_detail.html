@@ -11,7 +11,7 @@
     <div class="row">
         <div class="col-md-8">
             <center>
-                {%for img in evenement.image.all%}
+                {%for img in evenement.images.all%}
                     {%if forloop.first%}
                         <img src="{{img.image.url}}" class="img-fluid"/><br/>
                     {%endif%}
@@ -45,7 +45,7 @@
             <!--champs commentaire + listes commentaires-->
                 
             {% if request.user.is_authenticated%} 
-                <form method="POST">
+                <form method="POST" action="{% url 'comment_event' evenement.pk %}">
                     <div class="row">
                     <div class="offset-2 col-md-7">
                         {% csrf_token%}
@@ -73,7 +73,7 @@
                             {% endif %}
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" id="date">repondre</a>
                             <ul class="dropdown-menu" role="menu">
-                                <form method="POST" action="{%url 'comment_reply' evenement.pk comment.pk%}">
+                                <form method="POST" action="{%url 'comment_event' evenement.pk%}">
                                     {% csrf_token%}
                                     {{form | crispy}} 
                                     <input type="submit" value="Submit">

@@ -13,7 +13,7 @@ TYPE_CHOICES=[
 class ForumForm(forms.ModelForm):
     description= forms.CharField(
         max_length=500,
-        min_length=10,
+        min_length=1,
         label='description',
         widget=forms.Textarea(attrs={
             'rows':'3',
@@ -32,7 +32,7 @@ class CommentForm(forms.ModelForm):
    
     comment= forms.CharField(
         max_length=500,
-        min_length=5,
+        min_length=1,
         label='',
         widget=forms.Textarea(attrs={
             'rows':'3',

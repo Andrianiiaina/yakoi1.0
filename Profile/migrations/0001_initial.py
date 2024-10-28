@@ -35,7 +35,6 @@ class Migration(migrations.Migration):
                 ('activities', models.CharField(blank=True, max_length=200, null=True)),
                 ('nif', models.CharField(blank=True, default='', max_length=50)),
                 ('stat', models.CharField(blank=True, default='', max_length=50)),
-                ('lien', models.CharField(blank=True, default='', max_length=450)),
                 ('followers', models.ManyToManyField(blank=True, related_name='followers', to=settings.AUTH_USER_MODEL)),
             ],
         ),

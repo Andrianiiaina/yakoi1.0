@@ -9,7 +9,6 @@ class Evenement(models.Model):
     user= models.ForeignKey(User,null=False, on_delete=models.CASCADE)
     title=models.CharField("title",max_length=50)
     description=models.TextField(default="")
-    image=models.ManyToManyField('Image', blank=True)
     date=models.DateField("date")
     end_date=models.DateField(blank=True, null=True)
     location=models.CharField("location",max_length=250,default="")
@@ -62,7 +61,8 @@ class Notification(models.Model):
         user_has_seen = models.BooleanField(default=False)
         
 class Image(models.Model):
-    image = models.ImageField(upload_to='uploads/post_photos', blank=True, null=True)   
+    evenement = models.ForeignKey(Evenement, on_delete=models.CASCADE, related_name='images', blank=True, null=True)
+    image = models.ImageField(upload_to='uploads/post_photos', blank=True, null=True) 
 
 class Tag(models.Model):
     name=models.CharField(max_length=255)  

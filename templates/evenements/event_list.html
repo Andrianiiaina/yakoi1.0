@@ -12,7 +12,7 @@
             <div class="marquee-content">
                 {% for event in  events_week%}
                 <a href="{% url 'event_detail' event.pk%}" id="marquee-txt">
-                    <img src="{{event.image.first.image.url}}" width="70" height="40px" id="marquee-img"/>
+                    <img src="{{event.images.first.image.url}}" width="70" height="40px" id="marquee-img"/>
                     {{event.title}}</a>
                 {%endfor%}                                                 
             </div>
