@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,get_object_or_404
 from django.urls import reverse_lazy
 from django.views import View
 from django.db.models import Q
@@ -34,7 +34,7 @@ class ForumListView(View):
 
 class ForumDetailView(View):
     def get(self,request,pk, *args,**kwargs):
-        forum=Forum.objects.get(pk=pk)
+        forum= get_object_or_404(Forum,pk=pk)
         forums_connexe=Forum.objects.filter(category=forum.category)
         context = {
             'forum':forum,

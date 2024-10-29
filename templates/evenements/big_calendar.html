@@ -3,7 +3,7 @@
 
 {% load crispy_forms_tags%}
 {% block css%}
-    <link rel="stylesheet" href="{% static 'big_category.css' %}"/>
+    <link rel="stylesheet" href="{% static 'event.css' %}"/>
 
 {% endblock css%}
 
@@ -32,11 +32,11 @@
                 <h4><span>{{"Les plus célèbres:"}}</span></h4>         
                 {% for famous_event in  famous_events%}
                     <div class="col-md-3 mb-5">
-                        <img src="{{famous_event.image.first.image.url}}" class="img-fluid" height="60px"/>                                       
+                        <img src="{{famous_event.images.first.image.url}}" class="img-fluid" height="60px"/>                                       
                     </div>
                     <div class="col-md-8">
-                        <a href="" id="title_evenement">{{ famous_event.title}}</a>
-                         <p id="p_list">{{ famous_event.description | truncatechars:50}}</p>
+                        <a href="" id="title_event">{{ famous_event.title}}</a>
+                         <p id="description_event">{{ famous_event.description | truncatechars:50}}</p>
                     </div>        
                 {%endfor%}
             </div>

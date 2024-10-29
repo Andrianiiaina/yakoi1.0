@@ -7,23 +7,23 @@
 
 
 <div class="container">
-    <div class="card2">
+    <div class="card-formulaire">
       <div class="row">
         <div class="offset-2 col-md-4">
-          <img src="/media/profile.jpg" width="105%" height="500px">
+          <img src="/media/images/profile.jpg" width="105%" height="500px">
         </div>
-        <div class="col-md-4 r1">
+        <div class="col-md-4 card_form">
           
           <form class="signup" method="post" action="{% url 'signup' %}">
             <center>
-              <h4 id="title" class="mb-3">S'inscrire</h4>
+              <h4 style="color: orangered;" class="mb-3">S'inscrire</h4>
             </center>
             {% csrf_token %}
            {{  register_form.as_p }}
-            <button class="form-control1" id="btn_connexion" type="submit" >S'inscrire </button>
+            <button class="primaryAction"  type="submit" >S'inscrire </button>
           </form>
           <small>
-            <a class="button btn1" href="#">Votre identifiant ne doit pas contenir d'espace</a><br/>
+            Votre pseudo ne doit pas contenir d'espace.<br/>
           </small>
         </div>
           

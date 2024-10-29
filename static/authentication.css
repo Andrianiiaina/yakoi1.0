@@ -2,7 +2,7 @@ body{
     width: 100%;
     background-color: #9e9e9e8c;
 }
-.card2{
+.card-formulaire{
     margin-top: 10%;
     margin-bottom: 10%;
 }
@@ -21,20 +21,10 @@ label {
     margin-top: 10%;
     border-radius: 3px;
 }
-#tete{
-    margin-bottom: 50px;
-}
 
-h4#title {
-    color: orangered;
-}
-.col-md-4.r1 {
+
+.col-md-4.card_form {
     padding: 5%;
     color: white;
     background: white;
-}
-.btn1 {
-    text-decoration: none;
-    color: grey;
-    font-size: 12px;
 }

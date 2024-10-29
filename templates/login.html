@@ -5,28 +5,28 @@
 {%endblock%}
 {% block content %}
   <div class="container">
-        <div class="card2">
+        <div class="card-formulaire">
               <div class="row">
                 <div class="offset-2 col-md-4">
-                  <img src="/media/profile.jpg" width="105%" height="450px">
+                  <img src="/media/images/profile.jpg" width="105%" height="450px">
                 </div>
-                  <div class="col-md-4 r1 mb-8">
+                  <div class="col-md-4 card_form mb-8">
                     <form method="POST" action="{% url 'login' %}">
 
                       {% csrf_token %}
 
                       <center>
-                        <h4 id="title" class="mb-3">Se connecter</h4>
+                        <h4 style="color: orangered;" class="mb-3">Se connecter</h4>
                       </center>
-                      <label for="username" class="form-label1">Identifiant:</label><br/>
+                      <label for="username" class="form-label">Pseudo:</label><br/>
                       <input type="text" name="username" min_length="4" id="username" class="form-control" required/><br/>
                       
                       
-                      <label for="password" class="form-label1">Mot de passe:</label><br/>
+                      <label for="password" class="form-label">Mot de passe:</label><br/>
                       <input type="password" name="password" min_length="8" id="password" class="form-control" required />
                          
                      <small>
-                      <a class="button btn1" href="{% url 'account_reset_password' %}">Mot de passe oublié?</a><br/>
+                      <a class="button" href="{% url 'account_reset_password' %}">Mot de passe oublié?</a><br/>
                     </small>
                       <center><button type="submit" class="primaryAction">Se connecter</button></center>
                     </form>  

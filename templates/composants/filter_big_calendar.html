@@ -1,8 +1,8 @@
-<div class="container">
+<div class="container mt-4">
     <form method="GET" action="{% url 'event_filtre'%}">
      <div class="row">
      <div class="offset-1 col-md-2">
-         <label for="region" class="form-label tt">location</label>
+         <label for="region" class="form-label">location</label>
          <select name="region" class="form-select mb-4" id="location">  
              <option value="all">Selectionner un location</option>
              {% for ville in villes %}                     
@@ -11,7 +11,7 @@
          </select>
      </div>
      <div class="col-md-2">
-         <label for="type" class="form-label tt">Type</label>
+         <label for="type" class="form-label">Type</label>
          <select name="type" class="form-select" id="type">
              <option value="all">Tout type d'evenement</option>
              <option value="technologie">Technologie & science</option>
@@ -25,13 +25,13 @@
          </select>
      </div>
      <div class="col-md-2">
-         <label for="tariff" class="form-label tt" >tariff maximum</label>
+         <label for="tariff" class="form-label" >tariff maximum</label>
          <input type="number" name="tariff" value="2000000" id="tariff" class="form-control">
      </div>
 
      <div class="col-md-2" >
-         <label for="jour" class="form-label tt">Ordre</label>
-         <select name="jour" class="form-select mb-4" id="jour">                      
+         <label for="order" class="form-label">Ordre</label>
+         <select name="order" class="form-select mb-4" id="order">                      
              <option value="asc">Croissant</option>
              <option value="desc">Décroissant</option>
 
@@ -39,7 +39,7 @@
      </div>
      <div class="col-md-2">
          <p>.</p>
-         <button type="submit" class="btn ttb">Appliquer le filtre</button>
+         <button type="submit" class="btn" id="btn-orange">Appliquer le filtre</button>
      </div>
  </div>
  </form>

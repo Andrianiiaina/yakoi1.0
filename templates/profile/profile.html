@@ -2,23 +2,23 @@
 {% load crispy_forms_tags%}
 {% load static %}
 {%block css%}
-    <link rel="stylesheet" href="{% static 'profile1.css' %}"/>
-{%endblock css%}
+    <link rel="stylesheet" href="{% static 'profile.css' %}"/>
+{%endblock css%} 
 {% block content%}
-<div class="container">   
+<div class="container mt-5">   
     <div class="row">
         {% if request.user == user%}
             {%if user.profile.fonction == True %}
                 <div class="col-md-2">
                     {%if is_following%}
-                        <form method="POST" action="{% url 'remove_follower' user.profile.pk%}">
+                        <form method="POST" action="{% url 'add_follower' user.profile.pk%}">
                             {% csrf_token %}
-                            <button type="submit"><img src="/media/suivre1.png" width="50px"></button>
+                            <button type="submit"><img src="/media/images/suivre1.png" width="50px"></button>
                         </form>
                     {%else%}
                         <form method="POST" action="{% url 'add_follower' user.profile.pk%}">
                             {% csrf_token %}
-                            <button type="submit"><img src="/media/suivre0.png" width="50px"></button>
+                            <button type="submit"><img src="/media/images/suivre0.png" width="50px"></button>
                         </form>
                     {%endif%} 
 
@@ -38,11 +38,11 @@
         {%endif%}
         <center>
             <img src="{{user.profile.picture.url}}" id="img_profile" width="400px" height="340px"/>
-                <h2 id="pseudo">{{user.username}}</h2>  
+                <h2 style="color: #41464b;">{{user.username}}</h2>  
                  
                 {% if user.profile.fonction == True %} 
                     <div id="bio">{{user.profile.bio}}</div>  
-                     <a href="{%url 'list_followers' user.profile.pk %}" class="btn">Suivis par {{user.profile.followers.cout}} personnes</a> 
+                    <small>Suivis par {{user.profile.followers.count}} personne{{user.profile.followers.count|pluralize}}</small>
 
                     <small>| Adresse : {{user.profile.localisation}} |
                      telephone : {{user.profile.contact}} |

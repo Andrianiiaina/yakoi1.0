@@ -1,0 +1,20 @@
+<div class="row">
+    <h4 style="color: orangered;">Connexes</h4>
+    {%for event in evenements%}
+        <div class="row">
+            <div class="col-md-4 mb-5">
+                {% for img in event.image.all %}
+                    {% if forloop.first %}
+                        <div class="">
+                            <img src="{{img.image.url}}" width="100px" height="70px"/>                     
+                        </div>                      
+                    {% endif %}
+                {%endfor%}      
+            </div>
+            <div class="col-md-8">
+                <a href="{%url 'event_detail' event.pk%}" id="title_event">{{ event.title}}</a>       
+                <p id="description_event">{{ event.description | truncatechars:50}}</p>             
+            </div> 
+        </div>                  
+    {%endfor%}
+</div>

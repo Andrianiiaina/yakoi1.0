@@ -10,11 +10,11 @@
                 </li>
             {%elif notification.notification_type == 2 %}
                 <li class="dropdown-item-parent">
-                    <a class="dropdown-item"  href="{%url 'event_notification' notification.pk notification.evenement.pk %}">{{notification.from_user}} a commenter votre publication</a>
+                    <a class="dropdown-item"  href="{%url 'event_notification' notification.pk notification.evenement.pk %}">{{notification.from_user}} a commenté votre publication</a>
                 </li> 
             {%elif notification.notification_type == 4 %}
                 <li class="dropdown-item-parent">
-                    <a class="dropdown-item" href="{%url 'event_notification' notification.pk notification.evenement.pk %}">{{notification.from_user}} a publier un evenement.</a>
+                    <a class="dropdown-item" href="{%url 'event_notification' notification.pk notification.evenement.pk %}">{{notification.from_user}} a publié un evenement.</a>
                 </li>       
             {%elif notification.notification_type == 5 %}
                 {% if notification.evenement.date == date.today %}
@@ -34,9 +34,9 @@
             {%endif%}    
         {%else%}
 
-        <li class="dropdown-item-parent">
-            <a class="dropdown-item" href="{%url 'follow_notification' notification.pk notification.from_user.profile.pk %}">{{notification.from_user}} a commencer à vous suivre</a>
-        </li>  
+            <li class="dropdown-item-parent">
+                <a class="dropdown-item" href="{%url 'follow_notification' notification.pk notification.from_user.profile.pk %}">{{notification.from_user}} a commencé à vous suivre</a>
+            </li>  
         {%endif%}
 
     {%endfor%}

@@ -1,0 +1,75 @@
+.footer{
+    background: #055160;
+    color: rgba(245, 236, 220, 0.767);
+    padding: 15px;
+}
+
+.dropdown-item-parent{
+    position: relative;
+    display: block;
+}
+.txt-link-to-grey {
+    text-decoration: none;
+    color: #41464b;
+    /* font-weight: bolder;
+    font-family: -webkit-pictograph; */
+}
+
+#search_input {
+    width: 60%;
+    border-radius: 12px 0px 0px 12px;
+    height: 40px;
+    padding-left: 50px;
+}
+
+
+
+#search_button {
+    background-color: #d3700e;
+    height: 40px;
+    text-align: center;
+    width: 165px;
+    border: none;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    margin: 0;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    vertical-align: bottom;
+}
+
+
+.btn-full-width  {
+    width: 100%;
+    color: white;
+}
+
+
+.modal-content {
+    background: rgb(250, 240, 240);
+    padding: 50px;
+}
+#btn-submit {
+    background-color: #c35911;
+    margin-top: 50px;
+    color: white;
+    border: none;
+    height: 50px;
+    width: 100px;
+    border-radius: 5px;
+}
+#modal-title {
+    font-size: 24px;
+    color: orangered;
+}
+.card{
+    box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.25);
+    margin-bottom: 20px;
+    border-radius: 20px;
+}
+#title_event {
+    color: #134999;
+    text-decoration: none;
+    font-weight: bolder;
+}

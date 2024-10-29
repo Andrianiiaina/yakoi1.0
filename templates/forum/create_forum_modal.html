@@ -1,0 +1,20 @@
+{% load crispy_forms_tags%}
+
+<div class="modal fade" id="createForum" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="createEvenementModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modal-title">Creer un forum</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+                <form method="POST" enctype="multipart/form-data" action="{%url 'forum_list' %}">
+                    {% csrf_token%}
+                    {{form | crispy}}
+                    <center><input type="submit" value="Publier" id="btn-submit"></center>
+                </form>  
+        </div>
+
+      </div>
+    </div>
+</div>

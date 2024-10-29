@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import View
 from django.db.models import Q
@@ -56,7 +56,6 @@ class EventListView(View):
                 new_event.save()  
                 for image in request.FILES.getlist('image'):
                     img=Image(image=image, evenement=new_event)
-
                     img.save()
                 new_event.save()  
 
@@ -68,7 +67,7 @@ class EventListView(View):
             return redirect('profile', username=request.user.username)   
 class EventDetailView(View):
     def get(self,request,pk, *args,**kwargs):
-        evenement= Evenement.objects.get(pk=pk)
+        evenement= get_object_or_404(Evenement,pk=pk)
         #recuperation des evenements connexes
         connexe_events=Evenement.objects.exclude(date__lte=datetime.date.today()+datetime.timedelta(days=-1)).filter(category = evenement.category)[:6]
         context = {

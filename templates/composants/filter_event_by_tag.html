@@ -7,17 +7,16 @@
                         </div>
                     </div>
 
-                    <div class="card-header btn1">
-                        <button type="submit" class="btn btn2">Rechercher</button>
+                    <div class="card-header">
+                        <button type="submit" class="btn btn-secondary btn-full-width">Rechercher</button>
                     </div>
                     
                     <div class="">
                         <div id="MyDiv">
-                            {%for i in tags%}  
-
-                                <button type="button" id="pp{{i.id}}" name="tagger" class="filtre_btn">
-                                    <input type="checkbox" id="p{{i.id}}" value="{{i.name}}" name="rc[]"/>
-                                    <label for="p{{i.id}}" class="form-check-label a">{{i.name}}</label>
+                            {%for tag in tags%}  
+                                <button type="button" id="tag{{tag.id}}" name="tagger" class="btn btn-primary">
+                                    <input type="checkbox" id="id_tag{{tag.id}}" value="{{tag.name}}" name="rc[]"/>
+                                    <label for="id_tag{{tag.id}}" class="form-check-label">{{tag.name}}</label>
                                 </button>
                             {%endfor%}
                         </div> 

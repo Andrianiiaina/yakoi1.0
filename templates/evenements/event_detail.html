@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="{% static 'event-detail.css' %}"/>
 {% endblock css%}
 {% block content%}
-<div class="container">
+<div class="container mt-5">
     <div class="row">
         <div class="col-md-8">
             <center>
@@ -17,24 +17,23 @@
                     {%endif%}
                 {%endfor%}                  
                
-                <h3 id="title_evenement">{{ evenement.title}}</h3>
+                <h3 id="title_event">{{ evenement.title}}</h3>
                 {% if request.user == evenement.user %}
-                    <a href="{% url 'event_edit' evenement.pk%}"><img src="/media/edit.png" width="30px"/></a>
-                    <a href="{% url 'event_delete' evenement.pk%}"><img src="/media/delete.png" width="30px" /></a>
+                    <a href="{% url 'event_edit' evenement.pk%}"><img src="/media/images/edit.png" width="30px"/></a>
+                    <a href="{% url 'event_delete' evenement.pk%}"><img src="/media/images/delete.png" width="30px" /></a>
                 {% endif %}
                 <p id="date"> à {{ evenement.location}} le {{ evenement.date}} | {{evenement.tariff}}ar git @<a href="{% url 'profile' evenement.user.pk%}">{{  evenement.user }}</a></p>
             </center>
                 <div class="body">
                     <p>{{ evenement.description }}</p>
                 </div>
-                
+            
                 {% if request.user.is_authenticated%}
                 <form method="POST" action="{% url 'like' evenement.pk%}">
                     {%csrf_token%}
                     <input type="hidden" value="{{request.path}}" name="next"/>
-                    <button type="submit" class="btn-txt">
+                    <button type="submit" class="btn btn-outline">
                         {{ evenement.likes.all.count }}like{{ evenement.likes.all.count|pluralize }}.
-                    
                     </button>
                     {{ comments.all.count }} commentaire{{comments.all.count|pluralize }}.
                     
@@ -64,9 +63,7 @@
                         <div id="comment">
                             <p id="comment-user">{{  comment.user }}</p> {{ comment.comment }}
                             <P id="date">{{comment.create_on}}</P>
-                            
                         </div>
-
                         <li class="dropdown">
                             {% if request.user == comment.user %}
                                 <a href="{% url 'comment_delete' evenement.pk comment.pk %}" id="date">supprimer</a>
@@ -98,26 +95,7 @@
             </div>
         </div>
         <div class="col-md-4">
-            <div class="row">
-                <h4 id="title_evenement">Connexes</h4>
-                {%for event in evenements%}
-                    <div class="row">
-                        <div class="col-md-4 connexe">
-                            {% for img in event.image.all %}
-                                {% if forloop.first %}
-                                    <div class="">
-                                        <img src="{{img.image.url}}" width="100px" height="70px"/>                     
-                                    </div>                      
-                                {% endif %}
-                            {%endfor%}      
-                        </div>
-                        <div class="col-md-8">
-                            <a href="{%url 'event_detail' event.pk%}" id="title_connexe">{{ event.title}}</a>       
-                            <p id="p_list">{{ event.description | truncatechars:50}}</p>             
-                        </div> 
-                    </div>                  
-                {%endfor%}
-            </div>
+            {% include "composants/event_connexe.html" with evenements=evenements %}
 
             
         </div>

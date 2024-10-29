@@ -8,7 +8,7 @@ class EventForm(forms.ModelForm):
         ('culture','Culture et patrimoine,...'),
         ('salon','Marché, manifestation, salon,...'),
         ('technologie','Technologie et science'),
-        ('sensation forte','Saut en parachute, Course,Karting,...'),
+        ('sensation_forte','Saut en parachute, Course,Karting,...'),
         ('excursion','Excursion, Sortie,...'),
         ('voyage','voyage organisé'),
         ('autres','Divers'),

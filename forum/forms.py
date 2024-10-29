@@ -1,12 +1,15 @@
 from django import forms
 from .models import Forum, CommentForum
 TYPE_CHOICES=[
-    ('Activite','Activité et sport'),
-    ('Loisir','Loisir'),
-    ('Culture','Culture et patrimoine,...'),
-    ('Salon','Marché, manifestation, salon,...'),
-    ('technologie','Technologie et science'),
-    ('autres','Divers'),
+    ('concert','Concert, Cinéma,...'),
+        ('activite','Activité et sport'),
+        ('culture','Culture et patrimoine,...'),
+        ('salon','Marché, manifestation, salon,...'),
+        ('technologie','Technologie et science'),
+        ('sensation forte','Saut en parachute, Course,Karting,...'),
+        ('excursion','Excursion, Sortie,...'),
+        ('voyage','voyage organisé'),
+        ('autres','Divers'),
 
 ]   
 

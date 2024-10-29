@@ -17,10 +17,10 @@ def get_calendar(request):
 
 def filter_event(request):
         today_date=datetime.date.today()
-        categories=self.request.GET.getlist('activities[]')
-        location=self.request.GET.get('region')
-        jour=self.request.GET.get('jour')
-        category_type=self.request.GET.get('type')
+        categories=request.GET.getlist('activities[]')
+        location=request.GET.get('region')
+        order=request.GET.get('order')
+        category_type=request.GET.get('type')
         evenements=Evenement.objects.all()
         
         if category_type != 'all'and category_type is not None:
@@ -31,13 +31,13 @@ def filter_event(request):
                 if i != " ":
                     evenements =evenements | Evenement.objects.filter(category=i)
                  
-        if jour == 'asc':
+        if order == 'asc':
             evenements=evenements & Evenement.objects.all()
-        elif jour == 'desc':
+        elif order == 'desc':
             evenements=evenements & Evenement.objects.all().order_by('-date')
         if location != 'all':
             evenements = evenements & Evenement.objects.filter(location =location) 
         
-        tariff_max=self.request.GET.get('tariff')
+        tariff_max=request.GET.get('tariff')
         evenements = evenements & Evenement.objects.filter(tariff__lte = tariff_max)
         return render(request, 'evenements/event_search.html',{'publications': evenements})   

@@ -2,15 +2,12 @@
 {% extends 'base.html'%}
 {% load static%}
 {% load crispy_forms_tags%}
-{% block css%}
-    <link rel="stylesheet" href="{% static 'foruma.css' %}"/>
-{% endblock css%}
 {% block content%}
 
 <div class="container">  
-    <div class="row row_search mt-5 row2">
+    <div class="row mb-5 mt-5 row2">
         <div class="col-md-6 mt-5 mb-2">
-            <h2><span>Forum YaKoi</span></h2>
+            <h2 style="color:orangered">Forum YaKoi</h2>
             <p>Demandez des renseignement, des conseils, posez vos questions, ou juste discutez avec les membres...</p>
            
         {% if request.user.is_authenticated%}    
@@ -23,7 +20,7 @@
         <div class="col-md-6 mt-5 mb-2">
             <form method="GET" action="{% url 'event_search'%}">   
                 <input type="text" name="query" placeholder="Rechercher un evenement" id="search_input"/>
-                <button id="search1">rechercher</button>
+                <button id="search_button">rechercher</button>
             </form>
         </div>
     </div>
@@ -32,15 +29,15 @@
                 <div class="row">
                             {% regroup forums|dictsort:"category" by category as forum_list %}
                             {% for forum in forum_list %}
-                                        <h4>{{forum.grouper}}</h4>
+                                        <h4>{{forum.grouper | upper}}</h4>
                                         {% for forum in forum.list %}
                                         <div class="m-2">                                                                                      
                                                     <div class="">                        
                                                             <strong> 
-                                                                <a href="{% url 'profile' forum.user.username%}" class="txt">@{{ forum.user.username}}</a>
+                                                                <a href="{% url 'profile' forum.user.username%}" class="txt-link-to-grey">@{{ forum.user.username}}</a>
                                                             </strong>
                                                             
-                                                    <a href="{% url 'forum_detail' forum.pk%}" id="texte" class="mt-2">
+                                                    <a href="{% url 'forum_detail' forum.pk%}" class="txt-link-to-grey mt-2">
                                                             <p class="pb-3 mb-0 small lh-sm border-bottom">{{ forum.description | truncatewords:20}}</p>                                                                                           
                                                         </a> 
                                                         </div>  
@@ -53,28 +50,9 @@
                 </div>  
             </div>
 
+            {% include 'composants/pagination.html' with evenements=forums%}   
+            {% include 'forum/create_forum_modal.html' with form=form%} 
 
-
-            <!--modal creation d'evenement--> 
-            <div class="modal fade" id="createEvenementModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="createEvenementModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                          <div class="modal-content">
-                            <div class="modal-header">
-                              <h5 class="modal-title" id="modal-title">Creer un forum</h5>
-                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                    <form method="POST" enctype="multipart/form-data" action="{%url 'forum_list' %}">
-                                        {% csrf_token%}
-                                        {{form | crispy}}
-                                        <center><input type="submit" value="Publier" id="btn-submit"></center>
-                                    </form>  
-                            </div>
-                    
-                          </div>
-                        </div>
-                        {% include 'composants/pagination.html' with evenements=forums%}   
-            </div>
     </div>
 </div>
 

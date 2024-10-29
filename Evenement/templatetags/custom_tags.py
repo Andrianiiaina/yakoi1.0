@@ -1,7 +1,8 @@
 from django import template
 from Evenement.models import Notification
-
+from Evenement.forms import EventForm
 register = template.Library()
+
 @register.inclusion_tag('show_notification.html', takes_context=True)
 def show_notifications(context):
     request_user= context['request'].user

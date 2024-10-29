@@ -5,15 +5,29 @@
             </div>
             <div class="col-md-8">
                     <h5>
-                        <a href="{% url 'event_detail' evenement.pk%}" id="title_evenement_list">{{ evenement.title}} </a>
+                        <a href="{% url 'event_detail' evenement.pk%}" id="title_event">{{ evenement.title}} </a>
                     </h5>                      
-                    <p  id="description">          
+                    <p>          
                         <a id="profile_lien">A {{evenement.location}} le {{ evenement.date}}</a><br/>   
                         {{ evenement.description| truncatechars:350}}   
                     </p>          
                     <p >
                         <small class="text-muted"> 
-                            <a href="{% url 'profile' evenement.user.username %}" class="txt">@{{ evenement.user.username}}</a> |  <a href="/yakoi/evenement/search?query={{evenement.category}}" class="txt">{{evenement.category}}</a> | {{evenement.likes.count}} like                              
+                            {% if request.user.is_authenticated%}
+                                <form method="POST" action="{% url 'like' evenement.pk%}">
+                                    <a href="{% url 'profile' evenement.user.username %}" class="txt-link-to-grey">@{{ evenement.user.username}}</a> |  
+                                    <a href="/yakoi/evenement/search?query={{evenement.category}}" class="txt-link-to-grey">{{evenement.category}}</a> | 
+                                    
+                                {{ comments.all.count }} commentaire{{comments.all.count|pluralize }} |
+                                    {%csrf_token%}
+                                    <input type="hidden" value="{{request.path}}" name="next"/>
+                                    <button type="submit" class="btn btn-outline">
+                                        {{ evenement.likes.all.count }} like{{ evenement.likes.all.count|pluralize }}.
+                                    </button>
+                                    
+                                </form>    
+                                {%endif%}   
+                                                             
                         </small>
                     </p>
                 

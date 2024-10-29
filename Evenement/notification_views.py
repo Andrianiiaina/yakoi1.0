@@ -1,7 +1,7 @@
 from django.shortcuts import redirect
 from django.views import View
 from django.http import HttpResponse
-from .models import Evenement, Comment, Notification, Image, Tag, Ville, Like
+from .models import Evenement, Comment, Notification, Image, Tag, Ville, Like, User
 import datetime
 class EventNotification(View):
     def get(self, request, notification_pk, evenement_pk, *args,**kwargs):

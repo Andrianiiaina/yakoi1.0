@@ -6,32 +6,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'bootstrap.css' %}"/>
-    <link rel="stylesheet" href="{% static 'appi.css' %}"/>
+    <link rel="stylesheet" href="{% static 'base.css' %}">
 
     {% block css %}
     {% endblock css%}
     <style>
-    
-        .container-fluid.base {
-            margin-top: 80px;
-        }
-        div#MyDiv > button, div#MyDiv2 > button {
-            margin: 3px;
-            padding: 5px;
-            border: 1px solid gray;
-            border-radius: 4px;
-        }
+        
     </style>
-    <title>Document</title>
+    <title>Yakoii</title>
 </head>
-<body>
-    
-
+<body class="d-flex flex-column min-vh-100">
     <div class="container">
         {%include 'composants/navbar.html' with show_notifications=show_notifications %}
     </div>
 
-    <div class="container-fluid base">
+    <div class="container-fluid mt-5">
         {% if messages%}
             {% for message in messages %}
                 <div class="alert alert-success">              
@@ -95,7 +84,7 @@ function tagger(){
     liste= document.getElementsByName('tagger');
   
     for(let i=1;i<=liste.length;i++){
-        listes[i]= document.getElementById("pp"+i);
+        listes[i]= document.getElementById("tag"+i);
     }
     for (let i=1;i<listes.length;i++){
         listes[i].addEventListener('click', function() {

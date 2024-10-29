@@ -1,37 +1,18 @@
 
 <form method="GET" action="{% url 'event_filtre'%}">
-    <label for="region" class="form-label mt-2">location</label>
+    <label for="region" class="form-label mt-2">lieu</label>
     <select name="region" class="form-select mb-4" id="location">  
-        <option value="all">Selectionner un location</option>
-        {% for i in villes %}                     
-        <option>{{i.name}}</option>
+        <option value="all">Selectionner un lieu</option>
+        {% for ville in villes %}                     
+        <option>{{ville.name}}</option>
         {%endfor%}
     </select>
 
     <label class="form-label">Type</label><br/>
-    <input type="checkbox" name="activities[]" value="technologie"  class="form-check-input" id="exampleCheck"/>
-    <label class="form-check-label ck" for="exampleCheck">Technologie & science</label></br>
-
-    <input type="checkbox" name="activities[]" value="excursion" class="form-check-input" id="exampleCheck1"/>
-    <label class="form-check-label ck" for="exampleCheck1">Excursion</label></br>
-
-    <input type="checkbox" name="activities[]" value="concert" class="form-check-input" id="exampleCheck2"/>
-    <label class="form-check-label ck" for="exampleCheck2">Concert & spectacle</label><br/>
-
-    <input type="checkbox" name="activities[]" value="sport" class="form-check-input" id="exampleCheck3"/>
-    <label class="form-check-label ck" for="exampleCheck3">Sport & bien etre</label><br/>
-
-    <input type="checkbox" name="activities[]" value="divertissement" class="form-check-input" id="exampleCheck4"/>
-    <label class="form-check-label ck" for="exampleCheck4">Loisir & divertissement</label><br/>
-
-    <input type="checkbox" name="activities[]" value="salon" class="form-check-input" id="exampleCheck5"/>
-    <label class="form-check-label ck" for="exampleCheck5">Salon & conférence</label><br/>
-
-    <input type="checkbox" name="activities[]" value="autres" class="form-check-input" id="exampleCheck6"/>
-    <label class="form-check-label ck" for="exampleCheck6">Divers</label></br>
+   {% include 'profile/composants/check_activities.html'%}
     
-    <label for="jour" class="form-label">Ordre</label>
-    <select name="jour" class="form-select mb-4" id="jour">                      
+    <label for="order" class="form-label">Ordre</label>
+    <select name="order" class="form-select mb-4" id="order">                      
         <option value="asc">Croissant</option>
         <option value="desc">Décroissant</option>
 
@@ -42,6 +23,6 @@
     <label for="tariff" class="form-label">tariff maximum (ar)</label>
     <input type="number" name="tariff" id="tariff" class="form-control mb-4" value="100000">
 
-    <button type="submit" class="btn btn-secondary" >Appliquer le filtre</button>
+    <button type="submit" class="btn btn-secondary btn-full-width">Appliquer le filtre</button>
     
 </form>

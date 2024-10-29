@@ -24,12 +24,10 @@ def login_request(request):
     if request.user.is_authenticated:
         return redirect('event_list')
     if request.method == "POST":
-
-
         if User.objects.filter(username = request.POST['username']):
             user=User.objects.get(username = request.POST['username'])
-            pas=decryptage(user.password)
-            if pas == request.POST['password']:
+            password=decryptage(user.password)
+            if password == request.POST['password']:
                 auth.login(request,user)
                 return redirect('event_list')
             else:
