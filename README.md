@@ -15,13 +15,17 @@ The platform includes a forum for discussions, interactive features like likes a
 - Notifications: Receive notifications for various interactions within the app.
 # Screenshots
 
+
+![yakoi](https://github.com/user-attachments/assets/203e7d55-c5d1-4080-8b3c-dc02cad92a24)
+![yakoi2](https://github.com/user-attachments/assets/c986cc7e-eda1-4558-a9aa-a8bb6ee801f6)
+![yakoi3](https://github.com/user-attachments/assets/63d13f9e-4845-4142-915d-fecad3c8c41e)
 # Installation
 ## Prerequisites 
 Django for backend development  
 MySQL for data storage  
 Bootstrap for front-end styling  
 ## Setup
-Clone the repository: git clone https://github.com/your-username/Yakoi.git  
+Clone the repository: git clone https://github.com/Andrianiiaina/Yakoi.git  
 Navigate to the project directory. 
 ## Install dependencies:
 Django dependencies: pip install -r requirements.txt  
